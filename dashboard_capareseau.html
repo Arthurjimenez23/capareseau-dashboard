@@ -214,6 +214,186 @@
   </div>
 </div>
 
+<!-- ===== SECTION DÉFINITIONS ===== -->
+<div class="section-title" style="margin-top:8px;">📖 Définition des indicateurs</div>
+<div style="padding: 0 32px 32px;">
+
+  <!-- Intro -->
+  <p style="color:var(--muted);font-size:13px;margin-bottom:20px;max-width:900px;">
+    Le site <strong style="color:var(--text)">capareseau.fr</strong> publie les données du <strong style="color:var(--text)">Schéma Régional de Raccordement au Réseau des Énergies Renouvelables (S3REnR)</strong>.
+    Ce schéma définit, poste source par poste source, la capacité d'accueil maximale réservée pour les projets EnR dans chaque région.
+    Les indicateurs ci-dessous permettent de lire et d'interpréter les données affichées sur ce dashboard.
+  </p>
+
+  <!-- Groupe 1 : Capacités -->
+  <div style="margin-bottom:12px;font-size:11px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:1px;">
+    ⚡ Capacités (puissances en MW)
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;margin-bottom:28px;">
+
+    <div class="card" style="border-left:3px solid var(--accent);padding:18px 20px;">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+        <span style="background:rgba(56,189,248,0.15);color:var(--accent);padding:3px 9px;border-radius:6px;font-size:12px;font-weight:700;">CR</span>
+        <span style="font-weight:600;font-size:14px;">Capacité Réservée</span>
+      </div>
+      <p style="color:var(--muted);font-size:12px;line-height:1.6;">
+        Puissance totale attribuée au poste source dans le S3REnR. C'est le "plafond" de production EnR que le réseau peut absorber à ce nœud. Colonne <code style="background:var(--card2);padding:1px 5px;border-radius:3px;">INFO_CR</code>.
+      </p>
+      <div style="margin-top:10px;font-size:11px;color:var(--green);">✔ Plus c'est élevé, plus le potentiel d'accueil EnR est important.</div>
+    </div>
+
+    <div class="card" style="border-left:3px solid var(--green);padding:18px 20px;">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+        <span style="background:rgba(52,211,153,0.15);color:var(--green);padding:3px 9px;border-radius:6px;font-size:12px;font-weight:700;">NA</span>
+        <span style="font-weight:600;font-size:14px;">Puissance Non Affectée</span>
+      </div>
+      <p style="color:var(--muted);font-size:12px;line-height:1.6;">
+        Capacité réservée encore disponible pour de nouveaux projets : <em>CR − projets en service − file d'attente</em>. Représente les opportunités concrètes de raccordement. Colonne <code style="background:var(--card2);padding:1px 5px;border-radius:3px;">INFO_NA</code>.
+      </p>
+      <div style="margin-top:10px;font-size:11px;color:var(--green);">✔ Indicateur clé pour identifier les postes encore "ouverts".</div>
+    </div>
+
+    <div class="card" style="border-left:3px solid var(--yellow);padding:18px 20px;">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+        <span style="background:rgba(251,191,36,0.15);color:var(--yellow);padding:3px 9px;border-radius:6px;font-size:12px;font-weight:700;">ESS3R</span>
+        <span style="font-weight:600;font-size:14px;">Projets en Service</span>
+      </div>
+      <p style="color:var(--muted);font-size:12px;line-height:1.6;">
+        Puissance des installations EnR déjà raccordées et en fonctionnement sur ce poste dans le cadre du S3REnR. Colonne <code style="background:var(--card2);padding:1px 5px;border-radius:3px;">INFO_ESS3R</code>.
+      </p>
+      <div style="margin-top:10px;font-size:11px;color:var(--yellow);">⚡ Capacité déjà consommée par des projets opérationnels.</div>
+    </div>
+
+    <div class="card" style="border-left:3px solid var(--orange);padding:18px 20px;">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+        <span style="background:rgba(251,146,60,0.15);color:var(--orange);padding:3px 9px;border-radius:6px;font-size:12px;font-weight:700;">FAS3R</span>
+        <span style="font-weight:600;font-size:14px;">File d'Attente S3REnR</span>
+      </div>
+      <p style="color:var(--muted);font-size:12px;line-height:1.6;">
+        Puissance des projets EnR qui ont obtenu une place dans la file d'attente mais ne sont pas encore raccordés. Bloque de la capacité sans produire encore. Colonne <code style="background:var(--card2);padding:1px 5px;border-radius:3px;">INFO_FAS3R</code>.
+      </p>
+      <div style="margin-top:10px;font-size:11px;color:var(--orange);">⚠ Capacité "réservée" par des projets en cours de réalisation.</div>
+    </div>
+
+    <div class="card" style="border-left:3px solid var(--purple);padding:18px 20px;">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+        <span style="background:rgba(167,139,250,0.15);color:var(--purple);padding:3px 9px;border-radius:6px;font-size:12px;font-weight:700;">QP</span>
+        <span style="font-weight:600;font-size:14px;">Quote-Part Unitaire</span>
+      </div>
+      <p style="color:var(--muted);font-size:12px;line-height:1.6;">
+        Coût de raccordement au S3REnR en <strong style="color:var(--text)">€/kW</strong>. Représente la participation financière que le porteur de projet doit verser pour accéder au réseau via le schéma régional. Colonne <code style="background:var(--card2);padding:1px 5px;border-radius:3px;">INFO_QP</code>.
+      </p>
+      <div style="margin-top:10px;font-size:11px;color:var(--purple);">💶 Varie fortement selon les régions (de ~2 €/kW en IDF à ~93 €/kW en NA).</div>
+    </div>
+
+  </div>
+
+  <!-- Groupe 2 : Saturation -->
+  <div style="margin-bottom:12px;font-size:11px;font-weight:700;color:var(--red);text-transform:uppercase;letter-spacing:1px;">
+    🔴 Saturation
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;margin-bottom:28px;">
+
+    <div class="card" style="border-left:3px solid var(--red);padding:18px 20px;">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+        <span style="background:rgba(248,113,113,0.15);color:var(--red);padding:3px 9px;border-radius:6px;font-size:12px;font-weight:700;">TX ≥ 100 %</span>
+        <span style="font-weight:600;font-size:14px;">Poste Saturé</span>
+      </div>
+      <p style="color:var(--muted);font-size:12px;line-height:1.6;">
+        Un poste est dit <strong style="color:var(--red)">saturé</strong> lorsque le taux de remplissage <code style="background:var(--card2);padding:1px 5px;border-radius:3px;">INFO_TX</code> atteint ou dépasse <strong style="color:var(--text)">100 %</strong> : toute la capacité réservée est affectée (en service + file d'attente). Aucun nouveau projet ne peut être raccordé sur ce poste dans le cadre du S3REnR.
+      </p>
+      <div style="margin-top:10px;font-size:11px;color:var(--red);">✖ Poste fermé aux nouveaux raccordements S3REnR.</div>
+    </div>
+
+    <div class="card" style="border-left:3px solid var(--orange);padding:18px 20px;">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+        <span style="background:rgba(251,146,60,0.15);color:var(--orange);padding:3px 9px;border-radius:6px;font-size:12px;font-weight:700;">TX ≥ 80 %</span>
+        <span style="font-weight:600;font-size:14px;">Proche Saturation</span>
+      </div>
+      <p style="color:var(--muted);font-size:12px;line-height:1.6;">
+        Poste dont le taux de remplissage est compris entre <strong style="color:var(--text)">80 % et 99 %</strong>. La capacité résiduelle est très faible : seuls des projets de petite taille pourraient encore s'y raccorder. À surveiller dans le temps.
+      </p>
+      <div style="margin-top:10px;font-size:11px;color:var(--orange);">⚠ Capacité résiduelle très limitée — surveiller l'évolution.</div>
+    </div>
+
+    <div class="card" style="border-left:3px solid var(--muted);padding:18px 20px;">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+        <span style="background:rgba(148,163,184,0.15);color:var(--muted);padding:3px 9px;border-radius:6px;font-size:12px;font-weight:700;">TX</span>
+        <span style="font-weight:600;font-size:14px;">Taux de Remplissage</span>
+      </div>
+      <p style="color:var(--muted);font-size:12px;line-height:1.6;">
+        Calculé comme : <em>(ESS3R + FAS3R) / CR × 100</em>. Indique le pourcentage de la capacité réservée déjà occupée par des projets en service ou en file d'attente. Colonne <code style="background:var(--card2);padding:1px 5px;border-radius:3px;">INFO_TX</code>.
+        <br><br><strong style="color:var(--text)">⚠ À noter :</strong> la colonne <code style="background:var(--card2);padding:1px 5px;border-radius:3px;">TXA</code> (taux d'affectation) est toujours à 0 % dans la source — c'est <code style="background:var(--card2);padding:1px 5px;border-radius:3px;">INFO_TX</code> qu'il faut utiliser.
+      </p>
+    </div>
+
+  </div>
+
+  <!-- Groupe 3 : Acteurs réseau -->
+  <div style="margin-bottom:12px;font-size:11px;font-weight:700;color:var(--text);text-transform:uppercase;letter-spacing:1px;">
+    🔌 Capacités par Acteur Réseau
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;margin-bottom:28px;">
+
+    <div class="card" style="border-left:3px solid var(--accent);padding:18px 20px;">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+        <span style="background:rgba(56,189,248,0.15);color:var(--accent);padding:3px 9px;border-radius:6px;font-size:12px;font-weight:700;">RTE CDR</span>
+        <span style="font-weight:600;font-size:14px;">Capacité RTE (Transport)</span>
+      </div>
+      <p style="color:var(--muted);font-size:12px;line-height:1.6;">
+        Capacité disponible vue du <strong style="color:var(--text)">réseau de transport</strong> (Réseau de Transport d'Électricité — haute tension ≥ 63 kV). Colonne <code style="background:var(--card2);padding:1px 5px;border-radius:3px;">RTE_CDR</code>. Correspond aux installations raccordées directement au réseau HTB.
+      </p>
+    </div>
+
+    <div class="card" style="border-left:3px solid var(--green);padding:18px 20px;">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+        <span style="background:rgba(52,211,153,0.15);color:var(--green);padding:3px 9px;border-radius:6px;font-size:12px;font-weight:700;">GRD1 CDR</span>
+        <span style="font-weight:600;font-size:14px;">Capacité GRD1 (Distribution)</span>
+      </div>
+      <p style="color:var(--muted);font-size:12px;line-height:1.6;">
+        Capacité disponible vue du <strong style="color:var(--text)">réseau de distribution principal</strong> (gestionnaire de réseau de distribution de niveau 1, typiquement Enedis). Couvre les installations raccordées en HTA (20 kV). Colonne <code style="background:var(--card2);padding:1px 5px;border-radius:3px;">GRD1_CDR</code>.
+      </p>
+    </div>
+
+    <div class="card" style="border-left:3px solid var(--yellow);padding:18px 20px;">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+        <span style="background:rgba(251,191,36,0.15);color:var(--yellow);padding:3px 9px;border-radius:6px;font-size:12px;font-weight:700;">GRD2 CDR</span>
+        <span style="font-weight:600;font-size:14px;">Capacité GRD2 (Distribution locale)</span>
+      </div>
+      <p style="color:var(--muted);font-size:12px;line-height:1.6;">
+        Capacité disponible vue du <strong style="color:var(--text)">réseau de distribution secondaire</strong> (gestionnaire de niveau 2, ex. régies locales, SER, etc.). Colonne <code style="background:var(--card2);padding:1px 5px;border-radius:3px;">GRD2_CDR</code>.
+      </p>
+    </div>
+
+  </div>
+
+  <!-- Guide de lecture rapide -->
+  <div class="card" style="border:1px solid rgba(56,189,248,0.3);background:rgba(56,189,248,0.05);padding:20px 24px;">
+    <div style="font-weight:700;font-size:14px;margin-bottom:14px;color:var(--accent);">🧭 Guide de lecture rapide</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;font-size:12px;color:var(--muted);line-height:1.7;">
+      <div>
+        <strong style="color:var(--green);">Je cherche un poste pour raccorder un projet :</strong><br>
+        → Filtrer par région dans le tableau "Postes disponibles"<br>
+        → Trier par <strong>NA (disponible)</strong> décroissant<br>
+        → Vérifier que <strong>TX &lt; 80 %</strong> et NA ≥ puissance du projet
+      </div>
+      <div>
+        <strong style="color:var(--orange);">Je veux surveiller la saturation d'une région :</strong><br>
+        → Comparer <strong>Postes saturés (TX ≥ 100 %)</strong> / total postes<br>
+        → Suivre l'évolution dans le temps via l'historique CSV<br>
+        → Alerter si une région dépasse 30 % de postes saturés
+      </div>
+      <div>
+        <strong style="color:var(--purple);">Je veux estimer le coût de raccordement :</strong><br>
+        → Lire la <strong>Quote-Part (QP)</strong> du poste cible en €/kW<br>
+        → Multiplier par la puissance du projet en kW<br>
+        → Ex. : 500 kW × 84 €/kW = 42 000 € de participation S3REnR
+      </div>
+    </div>
+  </div>
+
+</div>
+
 <div class="footer">
   Dashboard Caparéseau — Données RTE S3REnR — Archivage quotidien automatique configuré<br>
   Prochaine mise à jour : demain à 08h08
