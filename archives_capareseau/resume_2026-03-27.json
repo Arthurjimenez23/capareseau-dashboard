@@ -1,0 +1,22 @@
+{
+  "date": "2026-03-27",
+  "source": "https://www.capareseau.fr/medias/53BD59A8-0733-2108-FF9B-726AFBC13CAC",
+  "total_postes": 3119,
+  "postes_par_region": {
+    "AUVERGNE-RHôNE-ALPES": {"count": 494, "capacite_reservee_mw": 7619.7},
+    "NOUVELLE-AQUITAINE": {"count": 415, "capacite_reservee_mw": 16362.0},
+    "OCCITANIE": {"count": 363, "capacite_reservee_mw": 8097.5},
+    "GRAND EST": {"count": 307, "capacite_reservee_mw": 5994.8},
+    "PROVENCE-ALPES-CôTE D'AZUR": {"count": 246, "capacite_reservee_mw": 6400.0},
+    "ILE-DE-FRANCE": {"count": 237, "capacite_reservee_mw": 960.3},
+    "HAUTS-DE-FRANCE": {"count": 229, "capacite_reservee_mw": 5499.9},
+    "BOURGOGNE-FRANCHE-COMTE": {"count": 177, "capacite_reservee_mw": 5400.3},
+    "PAYS DE LA LOIRE": {"count": 176, "capacite_reservee_mw": 5000.0},
+    "BRETAGNE": {"count": 166, "capacite_reservee_mw": 4403.0},
+    "CENTRE-VAL DE LOIRE": {"count": 158, "capacite_reservee_mw": 4939.0},
+    "NORMANDIE": {"count": 151, "capacite_reservee_mw": 1891.0}
+  },
+  "postes_avec_capacite_reservee": 2529,
+  "postes_satures_txa100": 0,
+  "note_archive": "CSV complet telecharge dans ~/Downloads/capareseau_2026-03-27.csv via Chrome"
+}

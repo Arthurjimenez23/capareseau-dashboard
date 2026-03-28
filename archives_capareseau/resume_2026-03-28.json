@@ -1,0 +1,48 @@
+{
+  "date": "2026-03-28",
+  "total_postes": 3119,
+  "nb_regions": 12,
+  "nb_postes_satures_100pct": 983,
+  "postes_par_region": {
+    "BRETAGNE": 166,
+    "CENTRE-VAL DE LOIRE": 158,
+    "HAUTS-DE-FRANCE": 229,
+    "OCCITANIE": 363,
+    "NOUVELLE-AQUITAINE": 415,
+    "AUVERGNE-RHONE-ALPES": 494,
+    "BOURGOGNE-FRANCHE-COMTE": 177,
+    "PROVENCE-ALPES-COTE D'AZUR": 246,
+    "GRAND EST": 307,
+    "NORMANDIE": 151,
+    "ILE-DE-FRANCE": 237,
+    "PAYS DE LA LOIRE": 176
+  },
+  "capacite_reservee_MW_par_region": {
+    "BRETAGNE": 4403.0,
+    "CENTRE-VAL DE LOIRE": 4939.0,
+    "HAUTS-DE-FRANCE": 5499.9,
+    "OCCITANIE": 8097.5,
+    "NOUVELLE-AQUITAINE": 16362.0,
+    "AUVERGNE-RHONE-ALPES": 7619.7,
+    "BOURGOGNE-FRANCHE-COMTE": 5400.3,
+    "PROVENCE-ALPES-COTE D'AZUR": 6400.0,
+    "GRAND EST": 5994.8,
+    "NORMANDIE": 1891.0,
+    "ILE-DE-FRANCE": 960.3,
+    "PAYS DE LA LOIRE": 5000.0
+  },
+  "satures_100pct_par_region": {
+    "BRETAGNE": 5,
+    "CENTRE-VAL DE LOIRE": 92,
+    "HAUTS-DE-FRANCE": 51,
+    "OCCITANIE": 68,
+    "NOUVELLE-AQUITAINE": 225,
+    "AUVERGNE-RHONE-ALPES": 19,
+    "BOURGOGNE-FRANCHE-COMTE": 117,
+    "PROVENCE-ALPES-COTE D'AZUR": 4,
+    "GRAND EST": 168,
+    "NORMANDIE": 85,
+    "ILE-DE-FRANCE": 121,
+    "PAYS DE LA LOIRE": 28
+  }
+}

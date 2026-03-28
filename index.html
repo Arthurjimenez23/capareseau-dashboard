@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard Caparéseau - Postes Sources RTE France</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  :root {
+    --bg: #0f172a; --card: #1e293b; --card2: #334155;
+    --text: #e2e8f0; --muted: #94a3b8; --accent: #38bdf8;
+    --green: #34d399; --yellow: #fbbf24; --orange: #fb923c; --red: #f87171;
+    --purple: #a78bfa;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+  .header { background: linear-gradient(135deg, #1e3a5f 0%, #0f172a 100%); padding: 24px 32px; border-bottom: 1px solid #334155; }
+  .header h1 { font-size: 24px; font-weight: 700; display: flex; align-items: center; gap: 12px; }
+  .header h1 span { color: var(--accent); }
+  .header .subtitle { color: var(--muted); margin-top: 4px; font-size: 14px; }
+
+  .kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; padding: 24px 32px; }
+  .kpi { background: var(--card); border-radius: 12px; padding: 20px; border: 1px solid #334155; }
+  .kpi .label { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
+  .kpi .value { font-size: 32px; font-weight: 700; margin-top: 4px; }
+  .kpi .detail { font-size: 12px; color: var(--muted); margin-top: 4px; }
+  .kpi.green .value { color: var(--green); }
+  .kpi.yellow .value { color: var(--yellow); }
+  .kpi.orange .value { color: var(--orange); }
+  .kpi.red .value { color: var(--red); }
+  .kpi.accent .value { color: var(--accent); }
+  .kpi.purple .value { color: var(--purple); }
+
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; padding: 0 32px 24px; }
+  .grid.three { grid-template-columns: 1fr 1fr 1fr; }
+  @media (max-width: 1200px) { .grid { grid-template-columns: 1fr; } .grid.three { grid-template-columns: 1fr; } }
+
+  .card { background: var(--card); border-radius: 12px; padding: 24px; border: 1px solid #334155; }
+  .card h2 { font-size: 16px; font-weight: 600; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+  .card h2 .badge { font-size: 11px; background: var(--card2); padding: 2px 8px; border-radius: 99px; color: var(--muted); }
+
+  .chart-container { position: relative; height: 300px; }
+  .chart-container.tall { height: 400px; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th { text-align: left; padding: 8px 10px; border-bottom: 1px solid #475569; color: var(--muted); font-weight: 600; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; position: sticky; top: 0; background: var(--card); }
+  td { padding: 7px 10px; border-bottom: 1px solid #1e293b; }
+  tr:hover td { background: rgba(56, 189, 248, 0.05); }
+
+  .bar { height: 6px; border-radius: 3px; background: #475569; position: relative; }
+  .bar .fill { position: absolute; top: 0; left: 0; height: 100%; border-radius: 3px; transition: width 0.5s; }
+  .bar .fill.green { background: var(--green); }
+  .bar .fill.yellow { background: var(--yellow); }
+  .bar .fill.orange { background: var(--orange); }
+  .bar .fill.red { background: var(--red); }
+
+  .tag { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; }
+  .tag.green { background: rgba(52, 211, 153, 0.15); color: var(--green); }
+  .tag.yellow { background: rgba(251, 191, 36, 0.15); color: var(--yellow); }
+  .tag.orange { background: rgba(251, 146, 60, 0.15); color: var(--orange); }
+  .tag.red { background: rgba(248, 113, 113, 0.15); color: var(--red); }
+
+  .table-scroll { max-height: 420px; overflow-y: auto; }
+  .table-scroll::-webkit-scrollbar { width: 6px; }
+  .table-scroll::-webkit-scrollbar-track { background: transparent; }
+  .table-scroll::-webkit-scrollbar-thumb { background: #475569; border-radius: 3px; }
+
+  .section-title { padding: 8px 32px 16px; font-size: 18px; font-weight: 700; color: var(--text); }
+
+  .legend { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 12px; }
+  .legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--muted); }
+  .legend-dot { width: 10px; height: 10px; border-radius: 50%; }
+
+  .filter-bar { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+  .filter-btn { padding: 6px 14px; border-radius: 8px; border: 1px solid #475569; background: transparent; color: var(--muted); cursor: pointer; font-size: 12px; transition: all 0.2s; }
+  .filter-btn:hover, .filter-btn.active { background: var(--accent); color: var(--bg); border-color: var(--accent); }
+
+  .search-box { padding: 8px 14px; border-radius: 8px; border: 1px solid #475569; background: var(--card2); color: var(--text); font-size: 13px; width: 100%; max-width: 300px; }
+  .search-box:focus { outline: none; border-color: var(--accent); }
+
+  .footer { padding: 16px 32px; text-align: center; color: var(--muted); font-size: 12px; border-top: 1px solid #334155; margin-top: 24px; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>⚡ <span>Caparéseau</span> — Dashboard Postes Sources RTE</h1>
+  <div class="subtitle">Données du 27 mars 2026 • Source : capareseau.fr • 3 119 postes sources • 12 régions</div>
+</div>
+
+<!-- KPIs -->
+<div class="kpis">
+  <div class="kpi accent">
+    <div class="label">Postes sources</div>
+    <div class="value">3 119</div>
+    <div class="detail">sur toute la France</div>
+  </div>
+  <div class="kpi green">
+    <div class="label">Capacité disponible</div>
+    <div class="value">21 752</div>
+    <div class="detail">MW restant à affecter</div>
+  </div>
+  <div class="kpi purple">
+    <div class="label">Capacité réservée</div>
+    <div class="value">76 568</div>
+    <div class="detail">MW totale S3REnR</div>
+  </div>
+  <div class="kpi yellow">
+    <div class="label">En service</div>
+    <div class="value">11 543</div>
+    <div class="detail">MW raccordés</div>
+  </div>
+  <div class="kpi orange">
+    <div class="label">En file d'attente</div>
+    <div class="value">48 917</div>
+    <div class="detail">MW en attente de raccordement</div>
+  </div>
+  <div class="kpi red">
+    <div class="label">Postes surchargés</div>
+    <div class="value">902</div>
+    <div class="detail">charge > 100% de la capacité</div>
+  </div>
+</div>
+
+<!-- Charts row -->
+<div class="grid">
+  <div class="card">
+    <h2>📊 Capacité réservée par région <span class="badge">MW</span></h2>
+    <div class="chart-container"><canvas id="chartRegionCR"></canvas></div>
+  </div>
+  <div class="card">
+    <h2>🔋 Répartition de la charge des postes</h2>
+    <div class="legend">
+      <div class="legend-item"><div class="legend-dot" style="background:var(--green)"></div> Libre (≤10%)</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--accent)"></div> Faible (10-50%)</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--yellow)"></div> Moyen (50-100%)</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--orange)"></div> Élevé (100-200%)</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--red)"></div> Surchargé (>200%)</div>
+    </div>
+    <div class="chart-container"><canvas id="chartLoadDist"></canvas></div>
+  </div>
+</div>
+
+<div class="grid">
+  <div class="card">
+    <h2>🌍 Puissances par région <span class="badge">MW</span></h2>
+    <div class="chart-container tall"><canvas id="chartRegionPower"></canvas></div>
+  </div>
+  <div class="card">
+    <h2>📈 Taux de charge par région</h2>
+    <div class="chart-container tall"><canvas id="chartRegionLoad"></canvas></div>
+  </div>
+</div>
+
+<!-- Tables -->
+<div class="section-title">🔴 Postes les plus chargés</div>
+<div class="grid">
+  <div class="card" style="grid-column: 1 / -1;">
+    <h2>Postes sources avec le plus fort taux de charge <span class="badge">Charge = (En service + File attente) / Capacité réservée</span></h2>
+    <div class="table-scroll">
+      <table id="tableOverloaded">
+        <thead><tr>
+          <th>Code</th><th>Nom</th><th>Région</th><th>Charge</th>
+          <th>Capacité réservée (MW)</th><th>En service (MW)</th><th>File d'attente (MW)</th><th>Quote-Part (€/kW)</th>
+        </tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="section-title">🟢 Postes avec capacité disponible</div>
+<div class="grid">
+  <div class="card" style="grid-column: 1 / -1;">
+    <h2>Postes avec la plus grande capacité restant à affecter <span class="badge">Opportunités de raccordement</span></h2>
+    <div class="filter-bar">
+      <input type="text" class="search-box" id="searchAvail" placeholder="🔍 Rechercher un poste ou une région...">
+      <button class="filter-btn active" onclick="filterRegion('all')">Toutes</button>
+      <button class="filter-btn" onclick="filterRegion('BRETAGNE')">Bretagne</button>
+      <button class="filter-btn" onclick="filterRegion('HAUTS-DE-FRANCE')">HdF</button>
+      <button class="filter-btn" onclick="filterRegion('NOUVELLE-AQUITAINE')">N-Aquit.</button>
+      <button class="filter-btn" onclick="filterRegion('OCCITANIE')">Occitanie</button>
+      <button class="filter-btn" onclick="filterRegion('GRAND EST')">Gd Est</button>
+      <button class="filter-btn" onclick="filterRegion('AUVERGNE')">ARA</button>
+      <button class="filter-btn" onclick="filterRegion('PROVENCE')">PACA</button>
+      <button class="filter-btn" onclick="filterRegion('BOURGOGNE')">BFC</button>
+    </div>
+    <div class="table-scroll" style="max-height: 500px;">
+      <table id="tableAvailable">
+        <thead><tr>
+          <th>Code</th><th>Nom</th><th>Région</th><th>Disponible (MW)</th>
+          <th style="width:200px">Taux de remplissage</th><th>Capacité réservée (MW)</th><th>Quote-Part (€/kW)</th>
+        </tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="section-title">📊 Synthèse par région</div>
+<div class="grid">
+  <div class="card" style="grid-column: 1 / -1;">
+    <div class="table-scroll">
+      <table id="tableRegions">
+        <thead><tr>
+          <th>Région</th><th>Postes</th><th>Capacité réservée (MW)</th><th>Disponible (MW)</th>
+          <th>En service (MW)</th><th>File d'attente (MW)</th>
+          <th style="width:120px">Charge</th><th>Postes libres</th><th>Postes surchargés</th>
+        </tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  Dashboard Caparéseau — Données RTE S3REnR — Archivage quotidien automatique configuré<br>
+  Prochaine mise à jour : demain à 08h08
+</div>
+
+<script>
+// ===== DATA =====
+const regionData = {
+  "BRETAGNE":{"count":166,"total_cr":4403,"total_na":3325,"total_ess":100,"total_fa":1007,"free":35,"low":67,"medium":41,"high":3,"overloaded":1,"noData":19},
+  "CENTRE-VAL DE LOIRE":{"count":158,"total_cr":4939,"total_na":388,"total_ess":964,"total_fa":4417,"free":7,"low":2,"medium":46,"high":77,"overloaded":6,"noData":20},
+  "HAUTS-DE-FRANCE":{"count":229,"total_cr":5500,"total_na":3337,"total_ess":314,"total_fa":2313,"free":44,"low":48,"medium":50,"high":41,"overloaded":8,"noData":38},
+  "OCCITANIE":{"count":363,"total_cr":8098,"total_na":3239,"total_ess":1179,"total_fa":3844,"free":25,"low":57,"medium":144,"high":57,"overloaded":3,"noData":77},
+  "NOUVELLE-AQUITAINE":{"count":415,"total_cr":16362,"total_na":2742,"total_ess":3572,"total_fa":11965,"free":17,"low":22,"medium":93,"high":194,"overloaded":44,"noData":45},
+  "AUVERGNE-RHÔNE-ALPES":{"count":494,"total_cr":7620,"total_na":1627,"total_ess":2039,"total_fa":5180,"free":41,"low":84,"medium":156,"high":152,"overloaded":14,"noData":47},
+  "BOURGOGNE-FRANCHE-COMTÉ":{"count":177,"total_cr":5400,"total_na":870,"total_ess":711,"total_fa":4308,"free":9,"low":24,"medium":51,"high":70,"overloaded":11,"noData":12},
+  "PROVENCE-ALPES-CÔTE D'AZUR":{"count":246,"total_cr":6400,"total_na":2291,"total_ess":780,"total_fa":3660,"free":48,"low":56,"medium":62,"high":53,"overloaded":3,"noData":24},
+  "GRAND EST":{"count":307,"total_cr":5995,"total_na":2144,"total_ess":903,"total_fa":3367,"free":44,"low":65,"medium":83,"high":62,"overloaded":5,"noData":48},
+  "NORMANDIE":{"count":151,"total_cr":1891,"total_na":559,"total_ess":263,"total_fa":1327,"free":14,"low":38,"medium":39,"high":28,"overloaded":5,"noData":27},
+  "ÎLE-DE-FRANCE":{"count":237,"total_cr":960,"total_na":142,"total_ess":327,"total_fa":750,"free":12,"low":22,"medium":22,"high":44,"overloaded":3,"noData":134},
+  "PAYS DE LA LOIRE":{"count":176,"total_cr":5000,"total_na":1088,"total_ess":392,"total_fa":4780,"free":13,"low":28,"medium":18,"high":16,"overloaded":2,"noData":99}
+};
+
+const topOverloaded = [
+  {c:"PERCY",n:"PERCY",r:"NORMANDIE",load:719,cr:11,ess:2.9,fa:76.2,qp:12.3},
+  {c:"MONCO",n:"MONCOUTANT",r:"NOUVELLE-AQUITAINE",load:500,cr:16.6,ess:71,fa:12,qp:92.73},
+  {c:"M.HER",n:"LA MOTHE ST HERAY",r:"NOUVELLE-AQUITAINE",load:467,cr:12,ess:51.8,fa:4.3,qp:92.73},
+  {c:"F.JOU",n:"LA FERTE-SOUS-JOUARRE",r:"ÎLE-DE-FRANCE",load:467,cr:6.2,ess:4.1,fa:25,qp:1.88},
+  {c:"PHELI",n:"PHELIBON",r:"CENTRE-VAL DE LOIRE",load:440,cr:6,ess:26.4,fa:0,qp:70.49},
+  {c:"GERMI",n:"GERMIGNY",r:"BOURGOGNE-FRANCHE-COMTÉ",load:359,cr:15.9,ess:2,fa:55.1,qp:75},
+  {c:"BXNE6",n:"BEAUNE-LA-ROLANDE",r:"CENTRE-VAL DE LOIRE",load:357,cr:25,ess:24.8,fa:64.4,qp:70.49},
+  {c:"BREAU",n:"BREAU",r:"BOURGOGNE-FRANCHE-COMTÉ",load:353,cr:9,ess:2,fa:29.8,qp:75},
+  {c:"PAROY",n:"PAROY",r:"BOURGOGNE-FRANCHE-COMTÉ",load:344,cr:9.9,ess:3,fa:31.1,qp:75},
+  {c:"MERLE",n:"MERLE",r:"NOUVELLE-AQUITAINE",load:333,cr:15,ess:50,fa:0,qp:92.73},
+  {c:"LUSAR",n:"LUSARAT",r:"NOUVELLE-AQUITAINE",load:327,cr:6,ess:10.6,fa:9,qp:92.73},
+  {c:"VRN63",n:"VARENNE",r:"NOUVELLE-AQUITAINE",load:318,cr:11,ess:8,fa:27,qp:92.73},
+  {c:"MARIS",n:"MARAIS-VERNIER",r:"NORMANDIE",load:313,cr:6,ess:0.3,fa:18.5,qp:12.3},
+  {c:"VILLO",n:"VILLORCEAU",r:"CENTRE-VAL DE LOIRE",load:310,cr:18,ess:15.2,fa:40.6,qp:70.49},
+  {c:"LIMOR",n:"LIMOURS",r:"ÎLE-DE-FRANCE",load:292,cr:6,ess:6,fa:11.5,qp:1.88},
+  {c:"BRIVE",n:"BRIVE",r:"NOUVELLE-AQUITAINE",load:283,cr:35.1,ess:18.2,fa:81,qp:92.73},
+  {c:"SSSLH",n:"SOLESMES",r:"HAUTS-DE-FRANCE",load:275,cr:6.8,ess:0.9,fa:17.8,qp:77.62},
+  {c:"STCYR",n:"ST CYR EN ARTHIES",r:"ÎLE-DE-FRANCE",load:271,cr:11.4,ess:24.9,fa:5.9,qp:1.88},
+  {c:"BLERE",n:"BLERE",r:"CENTRE-VAL DE LOIRE",load:261,cr:12,ess:11.3,fa:20,qp:70.49},
+  {c:"BELET",n:"BELET",r:"NOUVELLE-AQUITAINE",load:259,cr:22,ess:44.2,fa:12.8,qp:92.73},
+];
+
+const topAvailable = [
+  {c:"L.GAS",n:"LANDES DE GASCOGNE",r:"NOUVELLE-AQUITAINE",na:357.4,cr:1717.9,ess:0,fa:1360.5,qp:92.73},
+  {c:"956AA",n:"NORD-EST-MORBIHAN",r:"BRETAGNE",na:307,cr:307,ess:0,fa:0,qp:82.22},
+  {c:"PIEGE",n:"PIEGE (LA)",r:"OCCITANIE",na:280,cr:280,ess:0,fa:0,qp:84.13},
+  {c:"H.LIM",n:"HAUT LIMOUSIN",r:"NOUVELLE-AQUITAINE",na:259.1,cr:898.1,ess:0,fa:639,qp:92.73},
+  {c:"922AA",n:"OUEST-COTES-D'ARMOR",r:"BRETAGNE",na:240,cr:240,ess:0,fa:0,qp:82.22},
+  {c:"L.GIR",n:"LANDES GIRONDINES",r:"NOUVELLE-AQUITAINE",na:239.7,cr:336.7,ess:0,fa:97,qp:92.73},
+  {c:"SAVES",n:"SAVES",r:"OCCITANIE",na:205,cr:205,ess:0,fa:0,qp:84.13},
+  {c:"MANDA",n:"MANDARINS",r:"HAUTS-DE-FRANCE",na:200,cr:200,ess:0,fa:0,qp:77.62},
+  {c:"M.LIM",n:"MARCHE LIMOUSINE",r:"NOUVELLE-AQUITAINE",na:194.8,cr:362.8,ess:0,fa:168,qp:92.73},
+  {c:"PERT3",n:"PERTAIN 3",r:"HAUTS-DE-FRANCE",na:174.9,cr:216,ess:0,fa:41.1,qp:77.62},
+  {c:"VIBRA",n:"VIBRAYE",r:"PAYS DE LA LOIRE",na:173.3,cr:173.3,ess:0,fa:0,qp:60.84},
+  {c:"A.DUR",n:"ASSE-DURANCE",r:"PROVENCE-ALPES-CÔTE D'AZUR",na:160,cr:160,ess:0,fa:0,qp:78.47},
+  {c:"PLAST",n:"PLASTO",r:"HAUTS-DE-FRANCE",na:150,cr:150,ess:0,fa:0,qp:77.62},
+  {c:"GRANS",n:"GRANS",r:"PROVENCE-ALPES-CÔTE D'AZUR",na:150,cr:150,ess:0,fa:0,qp:78.47},
+  {c:"SCOUR",n:"ST JEAN DE COURANCE",r:"HAUTS-DE-FRANCE",na:142,cr:150,ess:0,fa:8,qp:77.62},
+  {c:"B.AUR",n:"BAS EN AURIOL",r:"PROVENCE-ALPES-CÔTE D'AZUR",na:140,cr:140,ess:0,fa:0,qp:78.47},
+  {c:"C.PEN",n:"COTES DE PENTHIEVRE",r:"BRETAGNE",na:140,cr:140,ess:0,fa:0,qp:82.22},
+  {c:"BARBO",n:"BARBONVILLE",r:"GRAND EST",na:136.5,cr:136.5,ess:0,fa:0,qp:73.82},
+  {c:"MOSEL",n:"MOSELLE SUD",r:"GRAND EST",na:130,cr:130,ess:0,fa:0,qp:73.82},
+  {c:"SL.ML",n:"ST LAURENT-MARVEJOLS",r:"OCCITANIE",na:122,cr:232,ess:0,fa:110,qp:84.13},
+  {c:"CABAR",n:"CABARDÈS",r:"OCCITANIE",na:120,cr:240,ess:39.5,fa:80.5,qp:84.13},
+  {c:"CAUSS",n:"CAUSSE MEJEAN",r:"OCCITANIE",na:120,cr:120,ess:0,fa:0,qp:84.13},
+  {c:"VIELL",n:"VIELLE AURE",r:"OCCITANIE",na:118,cr:118,ess:0,fa:0,qp:84.13},
+  {c:"C.NOR",n:"CHAMPAGNE NORD",r:"GRAND EST",na:115.5,cr:205,ess:1,fa:88.5,qp:73.82},
+  {c:"FUMEL",n:"FUMEL",r:"NOUVELLE-AQUITAINE",na:113.6,cr:144.2,ess:0,fa:30.6,qp:92.73},
+  {c:"LOUDU",n:"LOUDUN",r:"NOUVELLE-AQUITAINE",na:112,cr:340,ess:0,fa:228,qp:92.73},
+  {c:"VEAUC",n:"VEAUCHE",r:"AUVERGNE-RHÔNE-ALPES",na:111,cr:111,ess:0,fa:0,qp:42.4},
+  {c:"MAULX",n:"MAULX (CHAMPS)",r:"GRAND EST",na:107,cr:107,ess:0,fa:0,qp:73.82},
+  {c:"GLATO",n:"GLATONNIERE",r:"BRETAGNE",na:105,cr:190,ess:0,fa:85,qp:82.22},
+  {c:"ARGEN",n:"ARGENTON",r:"BRETAGNE",na:105,cr:155,ess:0,fa:50,qp:82.22},
+];
+
+// ===== CHARTS =====
+Chart.defaults.color = '#94a3b8';
+Chart.defaults.borderColor = 'rgba(71, 85, 105, 0.3)';
+Chart.defaults.font.family = '-apple-system, BlinkMacSystemFont, Segoe UI, sans-serif';
+
+const regionNames = Object.keys(regionData).sort((a,b) => regionData[b].total_cr - regionData[a].total_cr);
+const shortNames = regionNames.map(r => r.length > 18 ? r.substring(0, 16) + '…' : r);
+
+// Chart 1: Capacité réservée par région
+new Chart(document.getElementById('chartRegionCR'), {
+  type: 'bar',
+  data: {
+    labels: shortNames,
+    datasets: [{
+      label: 'Capacité réservée (MW)',
+      data: regionNames.map(r => regionData[r].total_cr),
+      backgroundColor: 'rgba(56, 189, 248, 0.7)',
+      borderRadius: 4
+    },{
+      label: 'Disponible (MW)',
+      data: regionNames.map(r => regionData[r].total_na),
+      backgroundColor: 'rgba(52, 211, 153, 0.7)',
+      borderRadius: 4
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { position: 'top' } },
+    scales: { x: { ticks: { maxRotation: 45, font: { size: 10 } } }, y: { title: { display: true, text: 'MW' } } }
+  }
+});
+
+// Chart 2: Load distribution (doughnut)
+new Chart(document.getElementById('chartLoadDist'), {
+  type: 'doughnut',
+  data: {
+    labels: ['Libre (≤10%)', 'Faible (10-50%)', 'Moyen (50-100%)', 'Élevé (100-200%)', 'Surchargé (>200%)', 'Sans données'],
+    datasets: [{
+      data: [309, 513, 805, 797, 105, 590],
+      backgroundColor: ['#34d399', '#38bdf8', '#fbbf24', '#fb923c', '#f87171', '#475569'],
+      borderWidth: 0
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: {
+      legend: { position: 'right', labels: { padding: 12, font: { size: 12 } } },
+      tooltip: { callbacks: { label: ctx => ctx.label + ': ' + ctx.parsed + ' postes (' + Math.round(ctx.parsed / 31.19) + '%)' } }
+    }
+  }
+});
+
+// Chart 3: Stacked bar - puissances par région
+new Chart(document.getElementById('chartRegionPower'), {
+  type: 'bar',
+  data: {
+    labels: shortNames,
+    datasets: [{
+      label: 'En service (MW)',
+      data: regionNames.map(r => regionData[r].total_ess),
+      backgroundColor: 'rgba(52, 211, 153, 0.8)', borderRadius: 2
+    },{
+      label: 'File d\'attente (MW)',
+      data: regionNames.map(r => regionData[r].total_fa),
+      backgroundColor: 'rgba(251, 191, 36, 0.8)', borderRadius: 2
+    },{
+      label: 'Disponible (MW)',
+      data: regionNames.map(r => regionData[r].total_na),
+      backgroundColor: 'rgba(56, 189, 248, 0.5)', borderRadius: 2
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { position: 'top' } },
+    scales: { x: { stacked: true, ticks: { maxRotation: 45, font: { size: 10 } } }, y: { stacked: true, title: { display: true, text: 'MW' } } }
+  }
+});
+
+// Chart 4: Load level by region (stacked horizontal bar)
+new Chart(document.getElementById('chartRegionLoad'), {
+  type: 'bar',
+  data: {
+    labels: shortNames,
+    datasets: [
+      {label: 'Libre', data: regionNames.map(r => regionData[r].free), backgroundColor: '#34d399'},
+      {label: 'Faible', data: regionNames.map(r => regionData[r].low), backgroundColor: '#38bdf8'},
+      {label: 'Moyen', data: regionNames.map(r => regionData[r].medium), backgroundColor: '#fbbf24'},
+      {label: 'Élevé', data: regionNames.map(r => regionData[r].high), backgroundColor: '#fb923c'},
+      {label: 'Surchargé', data: regionNames.map(r => regionData[r].overloaded), backgroundColor: '#f87171'},
+    ]
+  },
+  options: {
+    indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { position: 'top', labels: { font: { size: 11 } } } },
+    scales: { x: { stacked: true, title: { display: true, text: 'Nombre de postes' } }, y: { stacked: true, ticks: { font: { size: 10 } } } }
+  }
+});
+
+// ===== TABLES =====
+function loadTag(load) {
+  if (load > 200) return '<span class="tag red">' + load + '%</span>';
+  if (load > 100) return '<span class="tag orange">' + load + '%</span>';
+  if (load > 50) return '<span class="tag yellow">' + load + '%</span>';
+  return '<span class="tag green">' + load + '%</span>';
+}
+
+function barHTML(used, total) {
+  if (total <= 0) return '<div class="bar"><div class="fill green" style="width:0%"></div></div>';
+  const pct = Math.min(used / total * 100, 100);
+  const cls = pct > 80 ? 'red' : pct > 50 ? 'orange' : pct > 30 ? 'yellow' : 'green';
+  return '<div class="bar"><div class="fill ' + cls + '" style="width:' + pct + '%"></div></div>';
+}
+
+// Table: Overloaded
+const tbOver = document.querySelector('#tableOverloaded tbody');
+topOverloaded.forEach(p => {
+  tbOver.innerHTML += '<tr><td><strong>' + p.c + '</strong></td><td>' + p.n + '</td><td>' + p.r + '</td><td>' + loadTag(p.load) + '</td><td>' + p.cr + '</td><td>' + p.ess + '</td><td>' + p.fa + '</td><td>' + p.qp + ' €</td></tr>';
+});
+
+// Table: Available
+let allAvailable = topAvailable;
+function renderAvailTable(filter, search) {
+  const tb = document.querySelector('#tableAvailable tbody');
+  tb.innerHTML = '';
+  let data = allAvailable;
+  if (filter && filter !== 'all') data = data.filter(p => p.r.includes(filter));
+  if (search) { const s = search.toLowerCase(); data = data.filter(p => p.n.toLowerCase().includes(s) || p.c.toLowerCase().includes(s) || p.r.toLowerCase().includes(s)); }
+  data.forEach(p => {
+    const used = p.cr - p.na;
+    tb.innerHTML += '<tr><td><strong>' + p.c + '</strong></td><td>' + p.n + '</td><td>' + p.r + '</td><td style="color:var(--green);font-weight:700">' + p.na + ' MW</td><td>' + barHTML(used, p.cr) + '</td><td>' + p.cr + '</td><td>' + p.qp + ' €</td></tr>';
+  });
+}
+renderAvailTable('all');
+
+let currentFilter = 'all';
+function filterRegion(r) {
+  currentFilter = r;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  renderAvailTable(r, document.getElementById('searchAvail').value);
+}
+document.getElementById('searchAvail').addEventListener('input', e => renderAvailTable(currentFilter, e.target.value));
+
+// Table: Regions
+const tbReg = document.querySelector('#tableRegions tbody');
+regionNames.forEach(r => {
+  const d = regionData[r];
+  const load = d.total_cr > 0 ? Math.round((d.total_ess + d.total_fa) / d.total_cr * 100) : 0;
+  tbReg.innerHTML += '<tr><td><strong>' + r + '</strong></td><td>' + d.count + '</td><td>' + d.total_cr.toLocaleString('fr') + '</td><td style="color:var(--green)">' + d.total_na.toLocaleString('fr') + '</td><td>' + d.total_ess.toLocaleString('fr') + '</td><td>' + d.total_fa.toLocaleString('fr') + '</td><td>' + loadTag(load) + '</td><td style="color:var(--green)">' + (d.free + d.low) + '</td><td style="color:var(--red)">' + (d.high + d.overloaded) + '</td></tr>';
+});
+</script>
+</body>
+</html>
