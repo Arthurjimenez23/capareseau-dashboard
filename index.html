@@ -759,35 +759,6 @@ new Chart(document.getElementById('chartRegionCR'), {
 });
 
 // Chart 2: Load distribution (doughnut)
-(function(){
-  const cats = [0,0,0,0,0,0];
-  allPostesData.forEach(p => {
-    if (!p.cr || p.cr === 0) { cats[5]++; }
-    else if (p.load <= 10) { cats[0]++; }
-    else if (p.load <= 50) { cats[1]++; }
-    else if (p.load <= 100) { cats[2]++; }
-    else if (p.load <= 200) { cats[3]++; }
-    else { cats[4]++; }
-  });
-new Chart(document.getElementById('chartLoadDist'), {
-  type: 'doughnut',
-  data: {
-    labels: ['Libre (≤10%)', 'Faible (10-50%)', 'Moyen (50-100%)', 'Élevé (100-200%)', 'Surchargé (>200%)', 'Sans données'],
-    datasets: [{
-      data: cats,
-      backgroundColor: ['#34d399', '#38bdf8', '#fbbf24', '#fb923c', '#f87171', '#475569'],
-      borderWidth: 0
-    }]
-  },
-  options: {
-    responsive: true, maintainAspectRatio: false,
-    plugins: {
-      legend: { position: 'right', labels: { padding: 12, font: { size: 12 } } },
-      tooltip: { callbacks: { label: ctx => ctx.label + ': ' + ctx.parsed + ' postes (' + Math.round(ctx.parsed / allPostesData.length * 100) + '%)' } }
-    }
-  }
-});
-})();
 
 // Chart 3: Stacked bar - puissances par région
 new Chart(document.getElementById('chartRegionPower'), {
@@ -915,6 +886,37 @@ const historiqueData = [
   {date:"28/03",region:"ÎLE-DE-FRANCE",cr:960.3,na:24.2,ess:466.6,satures:121,proches:11},
   {date:"28/03",region:"PAYS DE LA LOIRE",cr:5000,na:2877.6,ess:558.1,satures:28,proches:11},
 ];
+
+// Chart: Répartition de la charge (dynamique depuis allPostesData)
+(function(){
+  const cats = [0,0,0,0,0,0];
+  allPostesData.forEach(p => {
+    if (!p.cr || p.cr === 0) { cats[5]++; }
+    else if (p.load <= 10) { cats[0]++; }
+    else if (p.load <= 50) { cats[1]++; }
+    else if (p.load <= 100) { cats[2]++; }
+    else if (p.load <= 200) { cats[3]++; }
+    else { cats[4]++; }
+  });
+new Chart(document.getElementById('chartLoadDist'), {
+  type: 'doughnut',
+  data: {
+    labels: ['Libre (≤10%)', 'Faible (10-50%)', 'Moyen (50-100%)', 'Élevé (100-200%)', 'Surchargé (>200%)', 'Sans données'],
+    datasets: [{
+      data: cats,
+      backgroundColor: ['#34d399', '#38bdf8', '#fbbf24', '#fb923c', '#f87171', '#475569'],
+      borderWidth: 0
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: {
+      legend: { position: 'right', labels: { padding: 12, font: { size: 12 } } },
+      tooltip: { callbacks: { label: ctx => ctx.label + ': ' + ctx.parsed + ' postes (' + Math.round(ctx.parsed / allPostesData.length * 100) + '%)' } }
+    }
+  }
+});
+})();
 
 // Region name normalizer (CSV uses non-accented forms)
 function matchRegion(posteRegion) {
