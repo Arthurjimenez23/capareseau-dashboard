@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rapport Pipe | Raccordement – Groupe Wattet</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  :root {
+    --primary: #1a5276; --primary-light: #2471a3; --primary-dark: #154360;
+    --accent: #27ae60; --accent-orange: #e67e22; --accent-red: #e74c3c;
+    --accent-teal: #1abc9c; --accent-purple: #8e44ad;
+    --bg: #f4f6f9; --card-bg: #ffffff; --border: #dde1e7;
+    --text: #2c3e50; --text-light: #7f8c8d;
+    --shadow: 0 2px 12px rgba(26,82,118,0.10); --radius: 10px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+  header { background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 60%, var(--primary-light) 100%); color: #fff; padding: 0 28px; display: flex; align-items: center; justify-content: space-between; height: 64px; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 16px rgba(21,67,96,0.30); }
+  .header-left { display: flex; align-items: center; gap: 14px; }
+  .header-logo { width: 36px; height: 36px; background: rgba(255,255,255,0.18); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 20px; }
+  .header-title { font-size: 18px; font-weight: 700; letter-spacing: 0.3px; }
+  .header-subtitle { font-size: 12px; opacity: 0.75; margin-top: 1px; }
+  .header-nav { display: flex; align-items: center; gap: 12px; }
+  .nav-link { color: rgba(255,255,255,0.85); text-decoration: none; font-size: 13px; font-weight: 500; padding: 6px 14px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.25); transition: all 0.2s; display: flex; align-items: center; gap: 6px; }
+  .nav-link:hover { background: rgba(255,255,255,0.15); color: #fff; border-color: rgba(255,255,255,0.45); }
+  .nav-link.active { background: rgba(255,255,255,0.20); color: #fff; border-color: rgba(255,255,255,0.5); }
+  .badge-live { background: var(--accent); color: #fff; font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 10px; letter-spacing: 0.5px; }
+  .tabs-bar { background: var(--card-bg); border-bottom: 2px solid var(--border); display: flex; padding: 0 28px; gap: 4px; }
+  .tab-btn { background: none; border: none; padding: 14px 20px; font-size: 13.5px; font-weight: 500; color: var(--text-light); cursor: pointer; border-bottom: 3px solid transparent; margin-bottom: -2px; transition: all 0.2s; display: flex; align-items: center; gap: 7px; }
+  .tab-btn:hover { color: var(--primary); }
+  .tab-btn.active { color: var(--primary); border-bottom-color: var(--primary); font-weight: 600; }
+  .content { max-width: 1400px; margin: 0 auto; padding: 24px 28px 40px; }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+  .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; margin-top: 4px; }
+  .section-title { font-size: 16px; font-weight: 700; color: var(--primary); display: flex; align-items: center; gap: 8px; }
+  .section-meta { font-size: 12px; color: var(--text-light); background: #eaf4fb; padding: 4px 12px; border-radius: 20px; border: 1px solid #bee3f8; }
+  .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 28px; }
+  .kpi-card { background: var(--card-bg); border-radius: var(--radius); padding: 18px 20px; box-shadow: var(--shadow); border-top: 4px solid var(--primary); position: relative; overflow: hidden; }
+  .kpi-card.accent-green { border-top-color: var(--accent); }
+  .kpi-card.accent-orange { border-top-color: var(--accent-orange); }
+  .kpi-card.accent-teal { border-top-color: var(--accent-teal); }
+  .kpi-card.accent-purple { border-top-color: var(--accent-purple); }
+  .kpi-card.accent-red { border-top-color: var(--accent-red); }
+  .kpi-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.8px; color: var(--text-light); margin-bottom: 8px; }
+  .kpi-value { font-size: 28px; font-weight: 800; color: var(--primary); line-height: 1; margin-bottom: 6px; }
+  .kpi-unit { font-size: 14px; font-weight: 500; color: var(--text-light); margin-left: 3px; }
+  .kpi-delta { font-size: 12px; font-weight: 600; display: inline-flex; align-items: center; gap: 3px; padding: 2px 8px; border-radius: 12px; }
+  .kpi-delta.positive { background: #eafaf1; color: #27ae60; }
+  .kpi-delta.negative { background: #fef9e7; color: #e67e22; }
+  .kpi-delta.neutral { background: #f2f3f4; color: var(--text-light); }
+  .kpi-sub { font-size: 12px; color: var(--text-light); margin-top: 4px; }
+  .charts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 24px; }
+  .chart-card { background: var(--card-bg); border-radius: var(--radius); padding: 20px 22px; box-shadow: var(--shadow); }
+  .chart-card.full-width { grid-column: 1 / -1; }
+  .chart-title { font-size: 13px; font-weight: 700; color: var(--primary); margin-bottom: 16px; display: flex; align-items: center; gap: 6px; }
+  .chart-container { position: relative; }
+  .table-card { background: var(--card-bg); border-radius: var(--radius); padding: 20px 22px; box-shadow: var(--shadow); margin-bottom: 20px; }
+  .table-wrapper { overflow-x: auto; border-radius: 8px; border: 1px solid var(--border); max-height: 520px; overflow-y: auto; }
+  .data-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .data-table th { background: #f0f4f8; color: var(--primary); font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: 0.6px; padding: 10px 14px; text-align: left; border-bottom: 2px solid var(--border); white-space: nowrap; }
+  .data-table td { padding: 10px 14px; border-bottom: 1px solid #f0f0f0; vertical-align: middle; }
+  .data-table tr:last-child td { border-bottom: none; }
+  .data-table tr:hover td { background: #f8fafc; }
+  .status-badge { display: inline-block; padding: 2px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; white-space: nowrap; }
+  .delta-positive { color: var(--accent); font-weight: 700; }
+  .delta-negative { color: var(--accent-red); font-weight: 700; }
+  .delta-zero { color: var(--text-light); }
+  .movement-section { margin-bottom: 28px; }
+  .movement-header { background: linear-gradient(90deg, #eaf4fb, #f4f6f9); border-left: 4px solid var(--primary); padding: 10px 16px; border-radius: 0 8px 8px 0; margin-bottom: 12px; font-size: 13.5px; font-weight: 700; color: var(--primary); display: flex; align-items: center; gap: 16px; }
+  .mv-delta-pos { color: #27ae60; font-weight: 600; font-size: 12px; }
+  .mv-delta-neg { color: #e74c3c; font-weight: 600; font-size: 12px; }
+  .page-footer { text-align: center; padding: 20px; font-size: 12px; color: var(--text-light); border-top: 1px solid var(--border); margin-top: 20px; }
+  @media (max-width: 900px) { .charts-grid { grid-template-columns: 1fr; } .kpi-grid { grid-template-columns: repeat(2, 1fr); } .content { padding: 16px; } header { padding: 0 16px; } .tabs-bar { padding: 0 16px; } }
+  @media (max-width: 600px) { .kpi-grid { grid-template-columns: 1fr 1fr; } .header-subtitle { display: none; } }
+</style>
+</head>
+<body>
+<header>
+  <div class="header-left">
+    <div class="header-logo">&#x26A1;</div>
+    <div>
+      <div class="header-title">Rapport Pipe &#8211; Raccordement</div>
+      <div class="header-subtitle">Groupe Wattet &middot; 4 semaines analys&#233;es &middot; G&#233;n&#233;r&#233; le 29/03/2026</div>
+    </div>
+  </div>
+  <nav class="header-nav">
+    <a href="dashboard_capareseau.html" class="nav-link">&#8592; Dashboard Principal</a>
+    <a href="#" class="nav-link active">&#x1F4CA; Rapport Pipe <span class="badge-live">LIVE</span></a>
+  </nav>
+</header>
+<div class="tabs-bar">
+  <button class="tab-btn active" onclick="showTab('vue-ensemble',this)">&#x1F4C8; Vue d'ensemble</button>
+  <button class="tab-btn" onclick="showTab('par-statut',this)">&#x1F3F7;&#xFE0F; Par Statut</button>
+  <button class="tab-btn" onclick="showTab('mouvements',this)">&#x1F504; Mouvements</button>
+  <button class="tab-btn" onclick="showTab('projets',this)">&#x1F4CB; Projets par Type</button>
+</div>
+<div class="content">
+  <!-- TAB 1 -->
+  <div id="tab-vue-ensemble" class="tab-panel active">
+    <div class="section-header">
+      <div class="section-title">&#x1F4CA; Indicateurs Cl&#233;s &#8211; Semaine du 29/03/2026</div>
+      <div class="section-meta">Derni&#232;re mise &#224; jour : 29 mars 2026</div>
+    </div>
+    <div class="kpi-grid">
+      <div class="kpi-card"><div class="kpi-label">Total Projets</div><div class="kpi-value">855 <span class="kpi-unit">proj.</span></div><span class="kpi-delta positive">&#9650; +7 vs S-1</span><div class="kpi-sub">+28 sur 4 semaines</div></div>
+      <div class="kpi-card accent-teal"><div class="kpi-label">Capacit&#233; PV</div><div class="kpi-value">1&#x202F;401 <span class="kpi-unit">MWc</span></div><span class="kpi-delta positive">&#9650; +0.8 MWc vs S-1</span><div class="kpi-sub">-22.8 MWc sur 4 semaines</div></div>
+      <div class="kpi-card accent-purple"><div class="kpi-label">Capacit&#233; BESS</div><div class="kpi-value">362 <span class="kpi-unit">MWh</span></div><span class="kpi-delta negative">&#9660; -3.9 MWh vs S-1</span><div class="kpi-sub">-9.4 MWh sur 4 semaines</div></div>
+      <div class="kpi-card accent-orange"><div class="kpi-label">En Construction</div><div class="kpi-value">171.5 <span class="kpi-unit">MWc</span></div><span class="kpi-delta positive">&#9650; +1.8 MWc vs S-1</span><div class="kpi-sub">14.5% du pipe total</div></div>
+      <div class="kpi-card accent-green"><div class="kpi-label">En Op&#233;ration</div><div class="kpi-value">173.4 <span class="kpi-unit">MWc</span></div><span class="kpi-delta neutral">= stable vs S-1</span><div class="kpi-sub">13.2% du pipe total</div></div>
+      <div class="kpi-card accent-red"><div class="kpi-label">RTB (Ready-to-Build)</div><div class="kpi-value">111.2 <span class="kpi-unit">MWc</span></div><span class="kpi-delta positive">&#9650; +0.4 MWc vs S-1</span><div class="kpi-sub">82 projets RTB</div></div>
+    </div>
+    <div class="charts-grid">
+      <div class="chart-card"><div class="chart-title">&#x1F4C8; &#201;volution hebdomadaire &#8211; Projets &amp; Capacit&#233; PV</div><div class="chart-container" style="height:280px"><canvas id="chartEvolution"></canvas></div></div>
+      <div class="chart-card"><div class="chart-title">&#x1F967; R&#233;partition par Type de Projet (29/03/2026)</div><div class="chart-container" style="height:280px"><canvas id="chartTypes"></canvas></div></div>
+    </div>
+    <div class="charts-grid">
+      <div class="chart-card"><div class="chart-title">&#x1F3D7;&#xFE0F; Phase GECKO &#8211; Nombre de Projets (29/03/2026)</div><div class="chart-container" style="height:280px"><canvas id="chartPhaseGecko"></canvas></div></div>
+      <div class="chart-card"><div class="chart-title">&#x1F50B; &#201;volution Capacit&#233; BESS (MWh) sur 4 semaines</div><div class="chart-container" style="height:280px"><canvas id="chartBess"></canvas></div></div>
+    </div>
+  </div>
+  <!-- TAB 2 -->
+  <div id="tab-par-statut" class="tab-panel">
+    <div class="section-header"><div class="section-title">&#x1F3F7;&#xFE0F; &#201;volution de la Capacit&#233; PV par Statut</div><div class="section-meta">En MWc &#8211; 4 semaines</div></div>
+    <div class="chart-card" style="margin-bottom:24px"><div class="chart-title">&#x1F4CA; Capacit&#233; PV (MWc) par Statut &#8211; &#201;volution hebdomadaire</div><div class="chart-container" style="height:380px"><canvas id="chartStatutEvolution"></canvas></div></div>
+    <div class="chart-card" style="margin-bottom:24px"><div class="chart-title">&#x1F4CB; Tableau d&#233;taill&#233; &#8211; Statuts &amp; &#201;volution</div><div class="table-wrapper"><table class="data-table"><thead><tr><th>Statut</th><th>Nb Projets (29/03)</th><th>MWc (08/03)</th><th>MWc (15/03)</th><th>MWc (22/03)</th><th>MWc (29/03)</th><th>&#916; 4 semaines</th></tr></thead><tbody id="statutTableBody"></tbody></table></div></div>
+    <div class="charts-grid">
+      <div class="chart-card"><div class="chart-title">&#x1F369; R&#233;partition MWc par Statut (29/03/2026)</div><div class="chart-container" style="height:300px"><canvas id="chartStatutDoughnut"></canvas></div></div>
+      <div class="chart-card"><div class="chart-title">&#x1F4CA; Nb Projets par Statut (29/03/2026)</div><div class="chart-container" style="height:300px"><canvas id="chartStatutNbProjets"></canvas></div></div>
+    </div>
+  </div>
+  <!-- TAB 3 -->
+  <div id="tab-mouvements" class="tab-panel">
+    <div class="section-header"><div class="section-title">&#x1F504; Mouvements Hebdomadaires du Pipeline</div><div class="section-meta">Variation par statut entre chaque semaine</div></div>
+    <div id="mouvementsContainer"></div>
+  </div>
+  <!-- TAB 4 -->
+  <div id="tab-projets" class="tab-panel">
+    <div class="section-header"><div class="section-title">&#x1F4CB; &#201;volution par Type de Projet</div><div class="section-meta">Sur 4 semaines</div></div>
+    <div class="charts-grid">
+      <div class="chart-card"><div class="chart-title">&#x1F4C8; &#201;volution du nombre de projets par type</div><div class="chart-container" style="height:340px"><canvas id="chartTypeEvolution"></canvas></div></div>
+      <div class="chart-card"><div class="chart-title">&#x1F4CA; Comparaison 08/03 vs 29/03</div><div class="chart-container" style="height:340px"><canvas id="chartTypeComparaison"></canvas></div></div>
+    </div>
+    <div class="table-card"><div class="chart-title">&#x1F4CB; Tableau &#8211; Projets par Type sur 4 semaines</div><div class="table-wrapper"><table class="data-table"><thead><tr><th>Type de Projet</th><th>08/03</th><th>15/03</th><th>22/03</th><th>29/03</th><th>&#916; 4 sem.</th><th>% total (29/03)</th></tr></thead><tbody id="typeTableBody"></tbody></table></div></div>
+  </div>
+</div>
+<div class="page-footer">Groupe Wattet &middot; Pipeline Raccordement &middot; Donn&#233;es consolid&#233;es depuis SharePoint &middot; <a href="dashboard_capareseau.html" style="color:var(--primary)">&#8592; Retour au Dashboard Principal</a></div>
+<script>
+const WEEKS=['08/03/2026','15/03/2026','22/03/2026','29/03/2026'];
+const GLOBAL_KPIS=[{date:'08/03',nbProjets:827,capacitePV:1424.1,capaciteBESS:371.4},{date:'15/03',nbProjets:833,capacitePV:1402.3,capaciteBESS:368.2},{date:'22/03',nbProjets:848,capacitePV:1400.5,capaciteBESS:365.9},{date:'29/03',nbProjets:855,capacitePV:1401.3,capaciteBESS:362.0}];
+const STATUTS=[{name:'1-PDB sign\u00e9e',nb:150,mwc:[228.1,234.5,238.3,240.2]},{name:'2-\u00c9tude impact (en cours)',nb:62,mwc:[80.3,83.1,85.2,87.1]},{name:'3-\u00c9tude impact r\u00e9alis\u00e9e',nb:78,mwc:[104.8,107.2,108.9,110.4]},{name:'5-PC/DP obtenu',nb:149,mwc:[192.4,193.8,194.1,193.6]},{name:'6-Tarif s\u00e9curis\u00e9',nb:51,mwc:[68.2,69.4,69.4,70.8]},{name:'7-RTB',nb:82,mwc:[108.9,110.2,110.8,111.2]},{name:'8-En construction',nb:124,mwc:[179.8,172.9,169.7,171.5]},{name:'9-En op\u00e9ration',nb:113,mwc:[173.4,173.4,173.4,173.4]}];
+const TYPES=[{name:'BAT',v:[298,301,302,305]},{name:'AGRIVOLT',v:[199,204,208,212]},{name:'REC',v:[183,185,188,190]},{name:'BESS',v:[80,81,83,84]},{name:'SOL',v:[24,24,25,25]},{name:'OMB',v:[0,0,0,15]},{name:'SERRE',v:[0,0,0,14]},{name:'Autre',v:[43,38,42,10]}];
+const GECKO=[{name:'Construction',nb:230},{name:'Aut. Urbanisme',nb:125},{name:'Pr\u00e9faisabilit\u00e9',nb:98},{name:'D\u00e9tection R\u00e9seau',nb:68},{name:'Ferm\u00e9',nb:56},{name:'Mise En Service',nb:52},{name:'Diagnostic',nb:49},{name:'Instruction',nb:49},{name:'Autre/Non d\u00e9f.',nb:28}];
+const MOUVEMENTS=[{from:'08/03',to:'15/03',dp:'+6',dm:'-21.8',rows:[{s:'1-PDB sign\u00e9e',n1:140,n2:144,dp:'+4',m1:228.1,m2:234.5},{s:'2-\u00c9tude impact',n1:55,n2:57,dp:'+2',m1:80.3,m2:83.1},{s:'3-\u00c9tude r\u00e9alis\u00e9e',n1:72,n2:74,dp:'+2',m1:104.8,m2:107.2},{s:'5-PC/DP obtenu',n1:141,n2:143,dp:'+2',m1:192.4,m2:193.8},{s:'6-Tarif s\u00e9curis\u00e9',n1:49,n2:50,dp:'+1',m1:68.2,m2:69.4},{s:'7-RTB',n1:80,n2:81,dp:'+1',m1:108.9,m2:110.2},{s:'8-En construction',n1:119,n2:121,dp:'+2',m1:179.8,m2:172.9},{s:'9-En op\u00e9ration',n1:113,n2:113,dp:'0',m1:173.4,m2:173.4},{s:'Autre/Inconnu',n1:58,n2:50,dp:'-8',m1:0,m2:0}]},{from:'15/03',to:'22/03',dp:'+15',dm:'-1.8',rows:[{s:'1-PDB sign\u00e9e',n1:144,n2:148,dp:'+4',m1:234.5,m2:238.3},{s:'2-\u00c9tude impact',n1:57,n2:60,dp:'+3',m1:83.1,m2:85.2},{s:'3-\u00c9tude r\u00e9alis\u00e9e',n1:74,n2:76,dp:'+2',m1:107.2,m2:108.9},{s:'5-PC/DP obtenu',n1:143,n2:146,dp:'+3',m1:193.8,m2:194.1},{s:'6-Tarif s\u00e9curis\u00e9',n1:50,n2:50,dp:'0',m1:69.4,m2:69.4},{s:'7-RTB',n1:81,n2:82,dp:'+1',m1:110.2,m2:110.8},{s:'8-En construction',n1:121,n2:123,dp:'+2',m1:172.9,m2:169.7},{s:'9-En op\u00e9ration',n1:113,n2:113,dp:'0',m1:173.4,m2:173.4},{s:'Autre/Inconnu',n1:50,n2:50,dp:'0',m1:0,m2:0}]},{from:'22/03',to:'29/03',dp:'+7',dm:'+0.8',rows:[{s:'1-PDB sign\u00e9e',n1:148,n2:150,dp:'+2',m1:238.3,m2:240.2},{s:'2-\u00c9tude impact',n1:60,n2:62,dp:'+2',m1:85.2,m2:87.1},{s:'3-\u00c9tude r\u00e9alis\u00e9e',n1:76,n2:78,dp:'+2',m1:108.9,m2:110.4},{s:'5-PC/DP obtenu',n1:146,n2:149,dp:'+3',m1:194.1,m2:193.6},{s:'6-Tarif s\u00e9curis\u00e9',n1:50,n2:51,dp:'+1',m1:69.4,m2:70.8},{s:'7-RTB',n1:82,n2:82,dp:'0',m1:110.8,m2:111.2},{s:'8-En construction',n1:123,n2:124,dp:'+1',m1:169.7,m2:171.5},{s:'9-En op\u00e9ration',n1:113,n2:113,dp:'0',m1:173.4,m2:173.4},{s:'Autre/Inconnu',n1:50,n2:46,dp:'-4',m1:0,m2:0}]}];
+const SC=['#2471a3','#1abc9c','#27ae60','#f39c12','#e67e22','#8e44ad','#e74c3c','#2ecc71'];
+const TC={BAT:'#1a5276',AGRIVOLT:'#27ae60',REC:'#2980b9',BESS:'#8e44ad',SOL:'#f39c12',OMB:'#1abc9c',SERRE:'#16a085',Autre:'#95a5a6'};
+const GC=['#1a5276','#2471a3','#2980b9','#27ae60','#1abc9c','#f39c12','#e67e22','#8e44ad','#95a5a6'];
+function showTab(id,btn){document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));document.getElementById('tab-'+id).classList.add('active');btn.classList.add('active');}
+const dOpts={responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{boxWidth:12,padding:14,font:{size:11}}},tooltip:{mode:'index',intersect:false}}};
+new Chart(document.getElementById('chartEvolution'),{type:'line',data:{labels:WEEKS,datasets:[{label:'Nb Projets',data:GLOBAL_KPIS.map(k=>k.nbProjets),borderColor:'#1a5276',backgroundColor:'rgba(26,82,118,0.1)',fill:true,tension:0.4,pointRadius:5,yAxisID:'y'},{label:'Capacit\u00e9 PV (MWc)',data:GLOBAL_KPIS.map(k=>k.capacitePV),borderColor:'#27ae60',backgroundColor:'rgba(39,174,96,0.08)',fill:true,tension:0.4,pointRadius:5,yAxisID:'y1'}]},options:{...dOpts,scales:{y:{type:'linear',position:'left',title:{display:true,text:'Nb Projets',color:'#1a5276',font:{size:11}},min:800,grid:{color:'#f0f0f0'}},y1:{type:'linear',position:'right',title:{display:true,text:'MWc PV',color:'#27ae60',font:{size:11}},min:1380,grid:{drawOnChartArea:false}},x:{grid:{color:'#f8f8f8'}}}}});
+new Chart(document.getElementById('chartTypes'),{type:'doughnut',data:{labels:TYPES.map(t=>t.name),datasets:[{data:TYPES.map(t=>t.v[3]),backgroundColor:TYPES.map(t=>TC[t.name]||'#95a5a6'),borderWidth:2,borderColor:'#fff'}]},options:{...dOpts,cutout:'60%'}});
+new Chart(document.getElementById('chartPhaseGecko'),{type:'bar',data:{labels:GECKO.map(p=>p.name),datasets:[{label:'Nb projets',data:GECKO.map(p=>p.nb),backgroundColor:GC,borderRadius:5}]},options:{...dOpts,indexAxis:'y',plugins:{...dOpts.plugins,legend:{display:false}},scales:{x:{grid:{color:'#f0f0f0'}},y:{grid:{display:false}}}}});
+new Chart(document.getElementById('chartBess'),{type:'bar',data:{labels:WEEKS,datasets:[{label:'BESS (MWh)',data:GLOBAL_KPIS.map(k=>k.capaciteBESS),backgroundColor:['rgba(142,68,173,0.6)','rgba(142,68,173,0.7)','rgba(142,68,173,0.85)','rgba(142,68,173,1)'],borderRadius:6}]},options:{...dOpts,plugins:{...dOpts.plugins,legend:{display:false}},scales:{y:{min:355,grid:{color:'#f0f0f0'},title:{display:true,text:'MWh',font:{size:11}}},x:{grid:{display:false}}}}});
+new Chart(document.getElementById('chartStatutEvolution'),{type:'line',data:{labels:WEEKS,datasets:STATUTS.map((s,i)=>({label:s.name,data:s.mwc,borderColor:SC[i],backgroundColor:SC[i]+'15',fill:false,tension:0.4,pointRadius:5}))},options:{...dOpts,scales:{y:{title:{display:true,text:'MWc',font:{size:11}},grid:{color:'#f0f0f0'}},x:{grid:{color:'#f8f8f8'}}}}});
+new Chart(document.getElementById('chartStatutDoughnut'),{type:'doughnut',data:{labels:STATUTS.map(s=>s.name),datasets:[{data:STATUTS.map(s=>s.mwc[3]),backgroundColor:SC,borderWidth:2,borderColor:'#fff'}]},options:{...dOpts,cutout:'55%'}});
+new Chart(document.getElementById('chartStatutNbProjets'),{type:'bar',data:{labels:STATUTS.map(s=>s.name),datasets:[{label:'Nb Projets',data:STATUTS.map(s=>s.nb),backgroundColor:SC,borderRadius:5}]},options:{...dOpts,plugins:{...dOpts.plugins,legend:{display:false}},scales:{y:{grid:{color:'#f0f0f0'}},x:{grid:{display:false},ticks:{font:{size:10}}}}}});
+new Chart(document.getElementById('chartTypeEvolution'),{type:'line',data:{labels:WEEKS,datasets:TYPES.map(t=>({label:t.name,data:t.v,borderColor:TC[t.name]||'#95a5a6',fill:false,tension:0.4,pointRadius:4}))},options:{...dOpts,scales:{y:{title:{display:true,text:'Nb Projets',font:{size:11}},grid:{color:'#f0f0f0'}},x:{grid:{color:'#f8f8f8'}}}}});
+new Chart(document.getElementById('chartTypeComparaison'),{type:'bar',data:{labels:TYPES.map(t=>t.name),datasets:[{label:'08/03/2026',data:TYPES.map(t=>t.v[0]),backgroundColor:'rgba(26,82,118,0.5)',borderRadius:4},{label:'29/03/2026',data:TYPES.map(t=>t.v[3]),backgroundColor:TYPES.map(t=>TC[t.name]||'#95a5a6'),borderRadius:4}]},options:{...dOpts,scales:{y:{grid:{color:'#f0f0f0'}},x:{grid:{display:false}}}}});
+(function(){const tb=document.getElementById('statutTableBody');STATUTS.forEach((s,i)=>{const d=(s.mwc[3]-s.mwc[0]).toFixed(1);const ds=d>0?\`+${d}\`:String(d);const dc=d>0?'delta-positive':d<0?'delta-negative':'delta-zero';tb.innerHTML+=\`<tr style="background:${i%2===0?'#fafbfc':'#fff'}"><td><span class="status-badge" style="background:${SC[i]}22;color:${SC[i]}">${s.name}</span></td><td style="text-align:center;font-weight:600">${s.nb}</td><td style="text-align:right">${s.mwc[0]} MWc</td><td style="text-align:right">${s.mwc[1]} MWc</td><td style="text-align:right">${s.mwc[2]} MWc</td><td style="text-align:right;font-weight:700">${s.mwc[3]} MWc</td><td style="text-align:right" class="${dc}">${ds} MWc</td></tr>\`;});const tt=[0,1,2,3].map(i=>STATUTS.reduce((a,s)=>a+s.mwc[i],0));const td=(tt[3]-tt[0]).toFixed(1);tb.innerHTML+=\`<tr style="background:#f0f4f8;font-weight:700;border-top:2px solid #dde1e7"><td>TOTAL</td><td style="text-align:center">${STATUTS.reduce((a,s)=>a+s.nb,0)}</td><td style="text-align:right">${tt[0].toFixed(1)} MWc</td><td style="text-align:right">${tt[1].toFixed(1)} MWc</td><td style="text-align:right">${tt[2].toFixed(1)} MWc</td><td style="text-align:right">${tt[3].toFixed(1)} MWc</td><td style="text-align:right" class="${td>0?'delta-positive':td<0?'delta-negative':'delta-zero'}">${td>0?\`+${td}\`:td} MWc</td></tr>\`;})();
+(function(){const tb=document.getElementById('typeTableBody');const tot=TYPES.reduce((a,t)=>a+t.v[3],0);[...TYPES].sort((a,b)=>b.v[3]-a.v[3]).forEach((t,i)=>{const d=t.v[3]-t.v[0];const pct=(t.v[3]/tot*100).toFixed(1);tb.innerHTML+=\`<tr style="background:${i%2===0?'#fafbfc':'#fff'}"><td><span class="status-badge" style="background:${(TC[t.name]||'#95a5a6')}22;color:${TC[t.name]||'#95a5a6'}">${t.name}</span></td><td style="text-align:center">${t.v[0]}</td><td style="text-align:center">${t.v[1]}</td><td style="text-align:center">${t.v[2]}</td><td style="text-align:center;font-weight:700">${t.v[3]}</td><td class="${d>0?'delta-positive':d<0?'delta-negative':'delta-zero'}" style="text-align:center">${d>0?\`+${d}\`:d}</td><td style="text-align:center"><div style="display:flex;align-items:center;gap:6px"><div style="flex:1;background:#eee;border-radius:4px;height:6px"><div style="width:${pct}%;background:${TC[t.name]||'#95a5a6'};height:100%;border-radius:4px"></div></div><span style="font-size:11px;font-weight:600;min-width:36px">${pct}%</span></div></td></tr>\`;});})();
+(function(){const c=document.getElementById('mouvementsContainer');MOUVEMENTS.forEach(m=>{const dpC=m.dp.startsWith('+')?'mv-delta-pos':'mv-delta-neg';const dmC=m.dm.startsWith('+')?'mv-delta-pos':'mv-delta-neg';let rows=m.rows.map((r,i)=>{const dpc=r.dp.startsWith('+')?'#27ae60':r.dp==='0'?'#7f8c8d':'#e74c3c';const dm=(r.m2-r.m1).toFixed(1);const dms=dm>0?\`+${dm}\`:String(dm);const dmc=dm>0?'#27ae60':dm<0?'#e74c3c':'#7f8c8d';return \`<tr style="background:${i%2===0?'#fafbfc':'#fff'}"><td>${r.s}</td><td style="text-align:center">${r.n1}</td><td style="text-align:center;font-weight:700">${r.n2}</td><td style="text-align:center;color:${dpc};font-weight:700">${r.dp}</td><td style="text-align:right">${r.m1} MWc</td><td style="text-align:right;font-weight:700">${r.m2} MWc</td><td style="text-align:right;color:${dmc};font-weight:700">${dms} MWc</td></tr>\`;}).join('');c.innerHTML+=\`<div class="movement-section"><div class="movement-header">&#9658; ${m.from} &#8594; ${m.to} <span class="${dpC}">&#916; Projets: ${m.dp}</span> <span class="${dmC}">&#916; MWc: ${m.dm}</span></div><div class="table-wrapper"><table class="data-table"><thead><tr><th>Statut</th><th>Nb (${m.from})</th><th>Nb (${m.to})</th><th>&#916; Proj.</th><th>MWc (${m.from})</th><th>MWc (${m.to})</th><th>&#916; MWc</th></tr></thead><tbody>${rows}</tbody></table></div></div>\`;});})();
+</script>
+</body>
+</html>
