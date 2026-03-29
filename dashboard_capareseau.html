@@ -15,10 +15,11 @@
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
 
-  .header { background: linear-gradient(135deg, #1e3a5f 0%, #0f172a 100%); padding: 24px 32px; border-bottom: 1px solid #334155; }
+  .header { background: linear-gradient(135deg, #1e3a5f 0%, #0f172a 100%); padding: 24px 32px; border-bottom: 1px solid #334155; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
   .header h1 { font-size: 24px; font-weight: 700; display: flex; align-items: center; gap: 12px; }
   .header h1 span { color: var(--accent); }
   .header .subtitle { color: var(--muted); margin-top: 4px; font-size: 14px; }
+  .header > div { flex: 1; }
 
   .kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; padding: 24px 32px; }
   .kpi { background: var(--card); border-radius: 12px; padding: 20px; border: 1px solid #334155; }
@@ -112,8 +113,14 @@
 <body>
 
 <div class="header">
-  <h1>⚡ <span>Caparéseau</span> — Dashboard Postes Sources RTE</h1>
-  <div class="subtitle">Données du 29 mars 2026 • Source : capareseau.fr • 3 119 postes sources • 12 régions</div>
+  <div>
+    <h1>⚡ <span>Caparéseau</span> — Dashboard Postes Sources RTE</h1>
+    <div class="subtitle">Données du 29 mars 2026 • Source : capareseau.fr • 3 119 postes sources • 12 régions</div>
+  </div>
+  <a href="rapport_pipe_dashboard.html" style="display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border-radius:8px;background:linear-gradient(135deg,#1a5276,#2471a3);color:#fff;text-decoration:none;font-size:13px;font-weight:600;border:1px solid rgba(255,255,255,0.2);white-space:nowrap;transition:all 0.2s" onmouseover="this.style.background='linear-gradient(135deg,#2471a3,#2980b9)'" onmouseout="this.style.background='linear-gradient(135deg,#1a5276,#2471a3)'">
+    📊 Rapport Pipe
+    <span style="background:#27ae60;color:#fff;font-size:10px;font-weight:700;padding:2px 6px;border-radius:10px">NOUVEAU</span>
+  </a>
 </div>
 
 <!-- KPIs -->
@@ -149,7 +156,6 @@
     <div class="detail">charge > 100% de la capacité</div>
   </div>
 </div>
-
 
 <!-- ===== SECTION ANALYSE POSTE SOURCE ===== -->
 <div class="section-title" style="margin-top:8px;">🔍 Analyse d'un poste source</div>
@@ -446,7 +452,6 @@
   </div>
 
 </div>
-
 
 <div class="footer">
   Dashboard Caparéseau — Données du 29 mars 2026<br>
