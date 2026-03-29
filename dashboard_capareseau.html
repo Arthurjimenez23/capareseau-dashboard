@@ -113,7 +113,7 @@
 <body>
 
 <!-- ===== LOGIN OVERLAY ===== -->
-<div id="loginOverlay" style="display:none;position:fixed;inset:0;z-index:9999;background:#0f172a;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:20px;">
+<div id="loginOverlay" style="display:none;position:fixed;inset:0;z-index:9999;background:#0f172a;align-items:center;justify-content:center;flex-direction:column;gap:20px;">
   <div style="text-align:center;margin-bottom:8px;">
     <div style="font-size:36px;margin-bottom:8px;">⚡</div>
     <div style="font-size:22px;font-weight:700;color:#e2e8f0;">Caparéseau Dashboard</div>
@@ -130,16 +130,22 @@
 </div>
 <script>
 (function(){
-  const HASH = 'd5f8873bd5612369fc6f76f21b3d435e91e59ad34d5060cf01c957c358e4c7d2';
-  const KEY = 'cap_auth';
-  async function sha256(msg){
-    const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(msg));
-    return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
+  var HASH='d5f8873bd5612369fc6f76f21b3d435e91e59ad34d5060cf01c957c358e4c7d2';
+  var KEY='cap_auth';
+  function showOverlay(){
+    var ov=document.getElementById('loginOverlay');
+    ov.style.display='flex';
+    setTimeout(function(){document.getElementById('pwdInput').focus();},50);
   }
-  async function checkPwd(){
-    const val = document.getElementById('pwdInput').value;
-    const h = await sha256(val);
-    if(h === HASH){
+  if(sessionStorage.getItem(KEY)!=='1'){showOverlay();}
+  async function sha256(msg){
+    var buf=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(msg));
+    return Array.from(new Uint8Array(buf)).map(function(b){return b.toString(16).padStart(2,'0');}).join('');
+  }
+  window.checkPwd=async function(){
+    var val=document.getElementById('pwdInput').value;
+    var h=await sha256(val);
+    if(h===HASH){
       sessionStorage.setItem(KEY,'1');
       document.getElementById('loginOverlay').style.display='none';
     } else {
@@ -147,16 +153,10 @@
       document.getElementById('pwdInput').value='';
       document.getElementById('pwdInput').focus();
     }
-  }
-  window.checkPwd = checkPwd;
-  window.addEventListener('DOMContentLoaded', function(){
-    if(sessionStorage.getItem(KEY)!=='1'){
-      document.getElementById('loginOverlay').style.display='flex';
-      document.getElementById('pwdInput').focus();
-    }
-  });
+  };
 })();
 </script>
+
 
 
 <div class="header">
