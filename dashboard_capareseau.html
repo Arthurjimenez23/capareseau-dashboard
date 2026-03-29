@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dashboard Caparéseau - Postes Sources RTE France</title>
+<title>Dashboard CaparÃ©seau - Postes Sources RTE France</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
   :root {
@@ -80,13 +80,40 @@
   .search-box:focus { outline: none; border-color: var(--accent); }
 
   .footer { padding: 16px 32px; text-align: center; color: var(--muted); font-size: 12px; border-top: 1px solid #334155; margin-top: 24px; }
+
+  /* ===== POSTE SOURCE ANALYZER ===== */
+  .autocomplete-wrap { position: relative; flex: 1; min-width: 280px; max-width: 480px; }
+  .autocomplete-list { display: none; position: absolute; top: 100%; left: 0; right: 0; background: var(--card2); border: 1px solid #475569; border-top: none; border-radius: 0 0 8px 8px; z-index: 200; max-height: 240px; overflow-y: auto; box-shadow: 0 8px 24px rgba(0,0,0,0.4); }
+  .autocomplete-list::-webkit-scrollbar { width: 5px; }
+  .autocomplete-list::-webkit-scrollbar-thumb { background: #475569; border-radius: 3px; }
+  .autocomplete-item { padding: 10px 14px; cursor: pointer; font-size: 13px; border-bottom: 1px solid rgba(71,85,105,0.4); display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+  .autocomplete-item:last-child { border-bottom: none; }
+  .autocomplete-item:hover { background: rgba(56,189,248,0.1); }
+  .autocomplete-item .ac-code { font-weight: 700; color: var(--accent); min-width: 60px; font-size: 12px; }
+  .autocomplete-item .ac-name { flex: 1; }
+  .autocomplete-item .ac-region { font-size: 11px; color: var(--muted); white-space: nowrap; }
+  .gauge-wrap { margin: 16px 0 4px; }
+  .gauge-label { display: flex; justify-content: space-between; font-size: 12px; color: var(--muted); margin-bottom: 6px; }
+  .gauge-bar { height: 14px; border-radius: 7px; background: #334155; overflow: hidden; }
+  .gauge-fill { height: 100%; border-radius: 7px; transition: width 0.7s ease; }
+  .metric-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(155px, 1fr)); gap: 12px; }
+  .metric-item { background: var(--card2); border-radius: 8px; padding: 14px 16px; border-left: 3px solid transparent; }
+  .metric-item .m-label { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 6px; }
+  .metric-item .m-value { font-size: 24px; font-weight: 800; line-height: 1.1; }
+  .metric-item .m-unit { font-size: 11px; color: var(--muted); margin-top: 2px; }
+  .poste-header { display: flex; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; gap: 12px; margin-bottom: 20px; padding-bottom: 18px; border-bottom: 1px solid #334155; }
+  .poste-title { font-size: 20px; font-weight: 800; line-height: 1.2; }
+  .poste-subtitle { color: var(--muted); font-size: 13px; margin-top: 4px; }
+  .sat-badge { padding: 8px 16px; border-radius: 8px; font-size: 14px; font-weight: 700; white-space: nowrap; }
+  .poste-empty { color: var(--muted); font-size: 13px; text-align: center; padding: 48px 20px; }
+  .poste-empty .big-icon { font-size: 40px; display: block; margin-bottom: 10px; }
 </style>
 </head>
 <body>
 
 <div class="header">
-  <h1>⚡ <span>Caparéseau</span> — Dashboard Postes Sources RTE</h1>
-  <div class="subtitle">Données du 27 mars 2026 • Source : capareseau.fr • 3 119 postes sources • 12 régions</div>
+  <h1>â¡ <span>CaparÃ©seau</span> â Dashboard Postes Sources RTE</h1>
+  <div class="subtitle">DonnÃ©es du 27 mars 2026 â¢ Source : capareseau.fr â¢ 3 119 postes sources â¢ 12 rÃ©gions</div>
 </div>
 
 <!-- KPIs -->
@@ -97,19 +124,19 @@
     <div class="detail">sur toute la France</div>
   </div>
   <div class="kpi green">
-    <div class="label">Capacité disponible</div>
+    <div class="label">CapacitÃ© disponible</div>
     <div class="value">21 752</div>
-    <div class="detail">MW restant à affecter</div>
+    <div class="detail">MW restant Ã  affecter</div>
   </div>
   <div class="kpi purple">
-    <div class="label">Capacité réservée</div>
+    <div class="label">CapacitÃ© rÃ©servÃ©e</div>
     <div class="value">76 568</div>
     <div class="detail">MW totale S3REnR</div>
   </div>
   <div class="kpi yellow">
     <div class="label">En service</div>
     <div class="value">11 543</div>
-    <div class="detail">MW raccordés</div>
+    <div class="detail">MW raccordÃ©s</div>
   </div>
   <div class="kpi orange">
     <div class="label">En file d'attente</div>
@@ -117,26 +144,26 @@
     <div class="detail">MW en attente de raccordement</div>
   </div>
   <div class="kpi red">
-    <div class="label">Postes surchargés</div>
+    <div class="label">Postes surchargÃ©s</div>
     <div class="value">902</div>
-    <div class="detail">charge > 100% de la capacité</div>
+    <div class="detail">charge > 100% de la capacitÃ©</div>
   </div>
 </div>
 
 <!-- Charts row -->
 <div class="grid">
   <div class="card">
-    <h2>📊 Capacité réservée par région <span class="badge">MW</span></h2>
+    <h2>ð CapacitÃ© rÃ©servÃ©e par rÃ©gion <span class="badge">MW</span></h2>
     <div class="chart-container"><canvas id="chartRegionCR"></canvas></div>
   </div>
   <div class="card">
-    <h2>🔋 Répartition de la charge des postes</h2>
+    <h2>ð RÃ©partition de la charge des postes</h2>
     <div class="legend">
-      <div class="legend-item"><div class="legend-dot" style="background:var(--green)"></div> Libre (≤10%)</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--green)"></div> Libre (â¤10%)</div>
       <div class="legend-item"><div class="legend-dot" style="background:var(--accent)"></div> Faible (10-50%)</div>
       <div class="legend-item"><div class="legend-dot" style="background:var(--yellow)"></div> Moyen (50-100%)</div>
-      <div class="legend-item"><div class="legend-dot" style="background:var(--orange)"></div> Élevé (100-200%)</div>
-      <div class="legend-item"><div class="legend-dot" style="background:var(--red)"></div> Surchargé (>200%)</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--orange)"></div> ÃlevÃ© (100-200%)</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--red)"></div> SurchargÃ© (>200%)</div>
     </div>
     <div class="chart-container"><canvas id="chartLoadDist"></canvas></div>
   </div>
@@ -144,25 +171,25 @@
 
 <div class="grid">
   <div class="card">
-    <h2>🌍 Puissances par région <span class="badge">MW</span></h2>
+    <h2>ð Puissances par rÃ©gion <span class="badge">MW</span></h2>
     <div class="chart-container tall"><canvas id="chartRegionPower"></canvas></div>
   </div>
   <div class="card">
-    <h2>📈 Taux de charge par région</h2>
+    <h2>ð Taux de charge par rÃ©gion</h2>
     <div class="chart-container tall"><canvas id="chartRegionLoad"></canvas></div>
   </div>
 </div>
 
 <!-- Tables -->
-<div class="section-title">🔴 Postes les plus chargés</div>
+<div class="section-title">ð´ Postes les plus chargÃ©s</div>
 <div class="grid">
   <div class="card" style="grid-column: 1 / -1;">
-    <h2>Postes sources avec le plus fort taux de charge <span class="badge">Charge = (En service + File attente) / Capacité réservée</span></h2>
+    <h2>Postes sources avec le plus fort taux de charge <span class="badge">Charge = (En service + File attente) / CapacitÃ© rÃ©servÃ©e</span></h2>
     <div class="table-scroll">
       <table id="tableOverloaded">
         <thead><tr>
-          <th>Code</th><th>Nom</th><th>Région</th><th>Charge</th>
-          <th>Capacité réservée (MW)</th><th>En service (MW)</th><th>File d'attente (MW)</th><th>Quote-Part (€/kW)</th>
+          <th>Code</th><th>Nom</th><th>RÃ©gion</th><th>Charge</th>
+          <th>CapacitÃ© rÃ©servÃ©e (MW)</th><th>En service (MW)</th><th>File d'attente (MW)</th><th>Quote-Part (â¬/kW)</th>
         </tr></thead>
         <tbody></tbody>
       </table>
@@ -170,12 +197,12 @@
   </div>
 </div>
 
-<div class="section-title">🟢 Postes avec capacité disponible</div>
+<div class="section-title">ð¢ Postes avec capacitÃ© disponible</div>
 <div class="grid">
   <div class="card" style="grid-column: 1 / -1;">
-    <h2>Postes avec la plus grande capacité restant à affecter <span class="badge">Opportunités de raccordement</span></h2>
+    <h2>Postes avec la plus grande capacitÃ© restant Ã  affecter <span class="badge">OpportunitÃ©s de raccordement</span></h2>
     <div class="filter-bar">
-      <input type="text" class="search-box" id="searchAvail" placeholder="🔍 Rechercher un poste ou une région...">
+      <input type="text" class="search-box" id="searchAvail" placeholder="ð Rechercher un poste ou une rÃ©gion...">
       <button class="filter-btn active" onclick="filterRegion('all')">Toutes</button>
       <button class="filter-btn" onclick="filterRegion('BRETAGNE')">Bretagne</button>
       <button class="filter-btn" onclick="filterRegion('HAUTS-DE-FRANCE')">HdF</button>
@@ -189,8 +216,8 @@
     <div class="table-scroll" style="max-height: 500px;">
       <table id="tableAvailable">
         <thead><tr>
-          <th>Code</th><th>Nom</th><th>Région</th><th>Disponible (MW)</th>
-          <th style="width:200px">Taux de remplissage</th><th>Capacité réservée (MW)</th><th>Quote-Part (€/kW)</th>
+          <th>Code</th><th>Nom</th><th>RÃ©gion</th><th>Disponible (MW)</th>
+          <th style="width:200px">Taux de remplissage</th><th>CapacitÃ© rÃ©servÃ©e (MW)</th><th>Quote-Part (â¬/kW)</th>
         </tr></thead>
         <tbody></tbody>
       </table>
@@ -198,15 +225,15 @@
   </div>
 </div>
 
-<div class="section-title">📊 Synthèse par région</div>
+<div class="section-title">ð SynthÃ¨se par rÃ©gion</div>
 <div class="grid">
   <div class="card" style="grid-column: 1 / -1;">
     <div class="table-scroll">
       <table id="tableRegions">
         <thead><tr>
-          <th>Région</th><th>Postes</th><th>Capacité réservée (MW)</th><th>Disponible (MW)</th>
+          <th>RÃ©gion</th><th>Postes</th><th>CapacitÃ© rÃ©servÃ©e (MW)</th><th>Disponible (MW)</th>
           <th>En service (MW)</th><th>File d'attente (MW)</th>
-          <th style="width:120px">Charge</th><th>Postes libres</th><th>Postes surchargés</th>
+          <th style="width:120px">Charge</th><th>Postes libres</th><th>Postes surchargÃ©s</th>
         </tr></thead>
         <tbody></tbody>
       </table>
@@ -214,43 +241,43 @@
   </div>
 </div>
 
-<!-- ===== SECTION DÉFINITIONS ===== -->
-<div class="section-title" style="margin-top:8px;">📖 Définition des indicateurs</div>
+<!-- ===== SECTION DÃFINITIONS ===== -->
+<div class="section-title" style="margin-top:8px;">ð DÃ©finition des indicateurs</div>
 <div style="padding: 0 32px 32px;">
 
   <!-- Intro -->
   <p style="color:var(--muted);font-size:13px;margin-bottom:20px;max-width:900px;">
-    Le site <strong style="color:var(--text)">capareseau.fr</strong> publie les données du <strong style="color:var(--text)">Schéma Régional de Raccordement au Réseau des Énergies Renouvelables (S3REnR)</strong>.
-    Ce schéma définit, poste source par poste source, la capacité d'accueil maximale réservée pour les projets EnR dans chaque région.
-    Les indicateurs ci-dessous permettent de lire et d'interpréter les données affichées sur ce dashboard.
+    Le site <strong style="color:var(--text)">capareseau.fr</strong> publie les donnÃ©es du <strong style="color:var(--text)">SchÃ©ma RÃ©gional de Raccordement au RÃ©seau des Ãnergies Renouvelables (S3REnR)</strong>.
+    Ce schÃ©ma dÃ©finit, poste source par poste source, la capacitÃ© d'accueil maximale rÃ©servÃ©e pour les projets EnR dans chaque rÃ©gion.
+    Les indicateurs ci-dessous permettent de lire et d'interprÃ©ter les donnÃ©es affichÃ©es sur ce dashboard.
   </p>
 
-  <!-- Groupe 1 : Capacités -->
+  <!-- Groupe 1 : CapacitÃ©s -->
   <div style="margin-bottom:12px;font-size:11px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:1px;">
-    ⚡ Capacités (puissances en MW)
+    â¡ CapacitÃ©s (puissances en MW)
   </div>
   <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;margin-bottom:28px;">
 
     <div class="card" style="border-left:3px solid var(--accent);padding:18px 20px;">
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
         <span style="background:rgba(56,189,248,0.15);color:var(--accent);padding:3px 9px;border-radius:6px;font-size:12px;font-weight:700;">CR</span>
-        <span style="font-weight:600;font-size:14px;">Capacité Réservée</span>
+        <span style="font-weight:600;font-size:14px;">CapacitÃ© RÃ©servÃ©e</span>
       </div>
       <p style="color:var(--muted);font-size:12px;line-height:1.6;">
-        Puissance totale attribuée au poste source dans le S3REnR. C'est le "plafond" de production EnR que le réseau peut absorber à ce nœud. Colonne <code style="background:var(--card2);padding:1px 5px;border-radius:3px;">INFO_CR</code>.
+        Puissance totale attribuÃ©e au poste source dans le S3REnR. C'est le "plafond" de production EnR que le rÃ©seau peut absorber Ã  ce nÅud. Colonne <code style="background:var(--card2);padding:1px 5px;border-radius:3px;">INFO_CR</code>.
       </p>
-      <div style="margin-top:10px;font-size:11px;color:var(--green);">✔ Plus c'est élevé, plus le potentiel d'accueil EnR est important.</div>
+      <div style="margin-top:10px;font-size:11px;color:var(--green);">â Plus c'est Ã©levÃ©, plus le potentiel d'accueil EnR est important.</div>
     </div>
 
     <div class="card" style="border-left:3px solid var(--green);padding:18px 20px;">
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
         <span style="background:rgba(52,211,153,0.15);color:var(--green);padding:3px 9px;border-radius:6px;font-size:12px;font-weight:700;">NA</span>
-        <span style="font-weight:600;font-size:14px;">Puissance Non Affectée</span>
+        <span style="font-weight:600;font-size:14px;">Puissance Non AffectÃ©e</span>
       </div>
       <p style="color:var(--muted);font-size:12px;line-height:1.6;">
-        Capacité réservée encore disponible pour de nouveaux projets : <em>CR − projets en service − file d'attente</em>. Représente les opportunités concrètes de raccordement. Colonne <code style="background:var(--card2);padding:1px 5px;border-radius:3px;">INFO_NA</code>.
+        CapacitÃ© rÃ©servÃ©e encore disponible pour de nouveaux projets : <em>CR â projets en service â file d'attente</em>. ReprÃ©sente les opportunitÃ©s concrÃ¨tes de raccordement. Colonne <code style="background:var(--card2);padding:1px 5px;border-radius:3px;">INFO_NA</code>.
       </p>
-      <div style="margin-top:10px;font-size:11px;color:var(--green);">✔ Indicateur clé pour identifier les postes encore "ouverts".</div>
+      <div style="margin-top:10px;font-size:11px;color:var(--green);">â Indicateur clÃ© pour identifier les postes encore "ouverts".</div>
     </div>
 
     <div class="card" style="border-left:3px solid var(--yellow);padding:18px 20px;">
@@ -259,9 +286,9 @@
         <span style="font-weight:600;font-size:14px;">Projets en Service</span>
       </div>
       <p style="color:var(--muted);font-size:12px;line-height:1.6;">
-        Puissance des installations EnR déjà raccordées et en fonctionnement sur ce poste dans le cadre du S3REnR. Colonne <code style="background:var(--card2);padding:1px 5px;border-radius:3px;">INFO_ESS3R</code>.
+        Puissance des installations EnR dÃ©jÃ  raccordÃ©es et en fonctionnement sur ce poste dans le cadre du S3REnR. Colonne <code style="background:var(--card2);padding:1px 5px;border-radius:3px;">INFO_ESS3R</code>.
       </p>
-      <div style="margin-top:10px;font-size:11px;color:var(--yellow);">⚡ Capacité déjà consommée par des projets opérationnels.</div>
+      <div style="margin-top:10px;font-size:11px;color:var(--yellow);">â¡ CapacitÃ© dÃ©jÃ  consommÃ©e par des projets opÃ©rationnels.</div>
     </div>
 
     <div class="card" style="border-left:3px solid var(--orange);padding:18px 20px;">
@@ -270,9 +297,9 @@
         <span style="font-weight:600;font-size:14px;">File d'Attente S3REnR</span>
       </div>
       <p style="color:var(--muted);font-size:12px;line-height:1.6;">
-        Puissance des projets EnR qui ont obtenu une place dans la file d'attente mais ne sont pas encore raccordés. Bloque de la capacité sans produire encore. Colonne <code style="background:var(--card2);padding:1px 5px;border-radius:3px;">INFO_FAS3R</code>.
+        Puissance des projets EnR qui ont obtenu une place dans la file d'attente mais ne sont pas encore raccordÃ©s. Bloque de la capacitÃ© sans produire encore. Colonne <code style="background:var(--card2);padding:1px 5px;border-radius:3px;">INFO_FAS3R</code>.
       </p>
-      <div style="margin-top:10px;font-size:11px;color:var(--orange);">⚠ Capacité "réservée" par des projets en cours de réalisation.</div>
+      <div style="margin-top:10px;font-size:11px;color:var(--orange);">â  CapacitÃ© "rÃ©servÃ©e" par des projets en cours de rÃ©alisation.</div>
     </div>
 
     <div class="card" style="border-left:3px solid var(--purple);padding:18px 20px;">
@@ -281,39 +308,39 @@
         <span style="font-weight:600;font-size:14px;">Quote-Part Unitaire</span>
       </div>
       <p style="color:var(--muted);font-size:12px;line-height:1.6;">
-        Coût de raccordement au S3REnR en <strong style="color:var(--text)">€/kW</strong>. Représente la participation financière que le porteur de projet doit verser pour accéder au réseau via le schéma régional. Colonne <code style="background:var(--card2);padding:1px 5px;border-radius:3px;">INFO_QP</code>.
+        CoÃ»t de raccordement au S3REnR en <strong style="color:var(--text)">â¬/kW</strong>. ReprÃ©sente la participation financiÃ¨re que le porteur de projet doit verser pour accÃ©der au rÃ©seau via le schÃ©ma rÃ©gional. Colonne <code style="background:var(--card2);padding:1px 5px;border-radius:3px;">INFO_QP</code>.
       </p>
-      <div style="margin-top:10px;font-size:11px;color:var(--purple);">💶 Varie fortement selon les régions (de ~2 €/kW en IDF à ~93 €/kW en NA).</div>
+      <div style="margin-top:10px;font-size:11px;color:var(--purple);">ð¶ Varie fortement selon les rÃ©gions (de ~2 â¬/kW en IDF Ã  ~93 â¬/kW en NA).</div>
     </div>
 
   </div>
 
   <!-- Groupe 2 : Saturation -->
   <div style="margin-bottom:12px;font-size:11px;font-weight:700;color:var(--red);text-transform:uppercase;letter-spacing:1px;">
-    🔴 Saturation
+    ð´ Saturation
   </div>
   <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;margin-bottom:28px;">
 
     <div class="card" style="border-left:3px solid var(--red);padding:18px 20px;">
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
-        <span style="background:rgba(248,113,113,0.15);color:var(--red);padding:3px 9px;border-radius:6px;font-size:12px;font-weight:700;">TX ≥ 100 %</span>
-        <span style="font-weight:600;font-size:14px;">Poste Saturé</span>
+        <span style="background:rgba(248,113,113,0.15);color:var(--red);padding:3px 9px;border-radius:6px;font-size:12px;font-weight:700;">TX â¥ 100 %</span>
+        <span style="font-weight:600;font-size:14px;">Poste SaturÃ©</span>
       </div>
       <p style="color:var(--muted);font-size:12px;line-height:1.6;">
-        Un poste est dit <strong style="color:var(--red)">saturé</strong> lorsque le taux de remplissage <code style="background:var(--card2);padding:1px 5px;border-radius:3px;">INFO_TX</code> atteint ou dépasse <strong style="color:var(--text)">100 %</strong> : toute la capacité réservée est affectée (en service + file d'attente). Aucun nouveau projet ne peut être raccordé sur ce poste dans le cadre du S3REnR.
+        Un poste est dit <strong style="color:var(--red)">saturÃ©</strong> lorsque le taux de remplissage <code style="background:var(--card2);padding:1px 5px;border-radius:3px;">INFO_TX</code> atteint ou dÃ©passe <strong style="color:var(--text)">100 %</strong> : toute la capacitÃ© rÃ©servÃ©e est affectÃ©e (en service + file d'attente). Aucun nouveau projet ne peut Ãªtre raccordÃ© sur ce poste dans le cadre du S3REnR.
       </p>
-      <div style="margin-top:10px;font-size:11px;color:var(--red);">✖ Poste fermé aux nouveaux raccordements S3REnR.</div>
+      <div style="margin-top:10px;font-size:11px;color:var(--red);">â Poste fermÃ© aux nouveaux raccordements S3REnR.</div>
     </div>
 
     <div class="card" style="border-left:3px solid var(--orange);padding:18px 20px;">
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
-        <span style="background:rgba(251,146,60,0.15);color:var(--orange);padding:3px 9px;border-radius:6px;font-size:12px;font-weight:700;">TX ≥ 80 %</span>
+        <span style="background:rgba(251,146,60,0.15);color:var(--orange);padding:3px 9px;border-radius:6px;font-size:12px;font-weight:700;">TX â¥ 80 %</span>
         <span style="font-weight:600;font-size:14px;">Proche Saturation</span>
       </div>
       <p style="color:var(--muted);font-size:12px;line-height:1.6;">
-        Poste dont le taux de remplissage est compris entre <strong style="color:var(--text)">80 % et 99 %</strong>. La capacité résiduelle est très faible : seuls des projets de petite taille pourraient encore s'y raccorder. À surveiller dans le temps.
+        Poste dont le taux de remplissage est compris entre <strong style="color:var(--text)">80 % et 99 %</strong>. La capacitÃ© rÃ©siduelle est trÃ¨s faible : seuls des projets de petite taille pourraient encore s'y raccorder. Ã surveiller dans le temps.
       </p>
-      <div style="margin-top:10px;font-size:11px;color:var(--orange);">⚠ Capacité résiduelle très limitée — surveiller l'évolution.</div>
+      <div style="margin-top:10px;font-size:11px;color:var(--orange);">â  CapacitÃ© rÃ©siduelle trÃ¨s limitÃ©e â surveiller l'Ã©volution.</div>
     </div>
 
     <div class="card" style="border-left:3px solid var(--muted);padding:18px 20px;">
@@ -322,46 +349,46 @@
         <span style="font-weight:600;font-size:14px;">Taux de Remplissage</span>
       </div>
       <p style="color:var(--muted);font-size:12px;line-height:1.6;">
-        Calculé comme : <em>(ESS3R + FAS3R) / CR × 100</em>. Indique le pourcentage de la capacité réservée déjà occupée par des projets en service ou en file d'attente. Colonne <code style="background:var(--card2);padding:1px 5px;border-radius:3px;">INFO_TX</code>.
-        <br><br><strong style="color:var(--text)">⚠ À noter :</strong> la colonne <code style="background:var(--card2);padding:1px 5px;border-radius:3px;">TXA</code> (taux d'affectation) est toujours à 0 % dans la source — c'est <code style="background:var(--card2);padding:1px 5px;border-radius:3px;">INFO_TX</code> qu'il faut utiliser.
+        CalculÃ© comme : <em>(ESS3R + FAS3R) / CR Ã 100</em>. Indique le pourcentage de la capacitÃ© rÃ©servÃ©e dÃ©jÃ  occupÃ©e par des projets en service ou en file d'attente. Colonne <code style="background:var(--card2);padding:1px 5px;border-radius:3px;">INFO_TX</code>.
+        <br><br><strong style="color:var(--text)">â  Ã noter :</strong> la colonne <code style="background:var(--card2);padding:1px 5px;border-radius:3px;">TXA</code> (taux d'affectation) est toujours Ã  0 % dans la source â c'est <code style="background:var(--card2);padding:1px 5px;border-radius:3px;">INFO_TX</code> qu'il faut utiliser.
       </p>
     </div>
 
   </div>
 
-  <!-- Groupe 3 : Acteurs réseau -->
+  <!-- Groupe 3 : Acteurs rÃ©seau -->
   <div style="margin-bottom:12px;font-size:11px;font-weight:700;color:var(--text);text-transform:uppercase;letter-spacing:1px;">
-    🔌 Capacités par Acteur Réseau
+    ð CapacitÃ©s par Acteur RÃ©seau
   </div>
   <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;margin-bottom:28px;">
 
     <div class="card" style="border-left:3px solid var(--accent);padding:18px 20px;">
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
         <span style="background:rgba(56,189,248,0.15);color:var(--accent);padding:3px 9px;border-radius:6px;font-size:12px;font-weight:700;">RTE CDR</span>
-        <span style="font-weight:600;font-size:14px;">Capacité RTE (Transport)</span>
+        <span style="font-weight:600;font-size:14px;">CapacitÃ© RTE (Transport)</span>
       </div>
       <p style="color:var(--muted);font-size:12px;line-height:1.6;">
-        Capacité disponible vue du <strong style="color:var(--text)">réseau de transport</strong> (Réseau de Transport d'Électricité — haute tension ≥ 63 kV). Colonne <code style="background:var(--card2);padding:1px 5px;border-radius:3px;">RTE_CDR</code>. Correspond aux installations raccordées directement au réseau HTB.
+        CapacitÃ© disponible vue du <strong style="color:var(--text)">rÃ©seau de transport</strong> (RÃ©seau de Transport d'ÃlectricitÃ© â haute tension â¥ 63 kV). Colonne <code style="background:var(--card2);padding:1px 5px;border-radius:3px;">RTE_CDR</code>. Correspond aux installations raccordÃ©es directement au rÃ©seau HTB.
       </p>
     </div>
 
     <div class="card" style="border-left:3px solid var(--green);padding:18px 20px;">
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
         <span style="background:rgba(52,211,153,0.15);color:var(--green);padding:3px 9px;border-radius:6px;font-size:12px;font-weight:700;">GRD1 CDR</span>
-        <span style="font-weight:600;font-size:14px;">Capacité GRD1 (Distribution)</span>
+        <span style="font-weight:600;font-size:14px;">CapacitÃ© GRD1 (Distribution)</span>
       </div>
       <p style="color:var(--muted);font-size:12px;line-height:1.6;">
-        Capacité disponible vue du <strong style="color:var(--text)">réseau de distribution principal</strong> (gestionnaire de réseau de distribution de niveau 1, typiquement Enedis). Couvre les installations raccordées en HTA (20 kV). Colonne <code style="background:var(--card2);padding:1px 5px;border-radius:3px;">GRD1_CDR</code>.
+        CapacitÃ© disponible vue du <strong style="color:var(--text)">rÃ©seau de distribution principal</strong> (gestionnaire de rÃ©seau de distribution de niveau 1, typiquement Enedis). Couvre les installations raccordÃ©es en HTA (20 kV). Colonne <code style="background:var(--card2);padding:1px 5px;border-radius:3px;">GRD1_CDR</code>.
       </p>
     </div>
 
     <div class="card" style="border-left:3px solid var(--yellow);padding:18px 20px;">
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
         <span style="background:rgba(251,191,36,0.15);color:var(--yellow);padding:3px 9px;border-radius:6px;font-size:12px;font-weight:700;">GRD2 CDR</span>
-        <span style="font-weight:600;font-size:14px;">Capacité GRD2 (Distribution locale)</span>
+        <span style="font-weight:600;font-size:14px;">CapacitÃ© GRD2 (Distribution locale)</span>
       </div>
       <p style="color:var(--muted);font-size:12px;line-height:1.6;">
-        Capacité disponible vue du <strong style="color:var(--text)">réseau de distribution secondaire</strong> (gestionnaire de niveau 2, ex. régies locales, SER, etc.). Colonne <code style="background:var(--card2);padding:1px 5px;border-radius:3px;">GRD2_CDR</code>.
+        CapacitÃ© disponible vue du <strong style="color:var(--text)">rÃ©seau de distribution secondaire</strong> (gestionnaire de niveau 2, ex. rÃ©gies locales, SER, etc.). Colonne <code style="background:var(--card2);padding:1px 5px;border-radius:3px;">GRD2_CDR</code>.
       </p>
     </div>
 
@@ -369,34 +396,59 @@
 
   <!-- Guide de lecture rapide -->
   <div class="card" style="border:1px solid rgba(56,189,248,0.3);background:rgba(56,189,248,0.05);padding:20px 24px;">
-    <div style="font-weight:700;font-size:14px;margin-bottom:14px;color:var(--accent);">🧭 Guide de lecture rapide</div>
+    <div style="font-weight:700;font-size:14px;margin-bottom:14px;color:var(--accent);">ð§­ Guide de lecture rapide</div>
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;font-size:12px;color:var(--muted);line-height:1.7;">
       <div>
         <strong style="color:var(--green);">Je cherche un poste pour raccorder un projet :</strong><br>
-        → Filtrer par région dans le tableau "Postes disponibles"<br>
-        → Trier par <strong>NA (disponible)</strong> décroissant<br>
-        → Vérifier que <strong>TX &lt; 80 %</strong> et NA ≥ puissance du projet
+        â Filtrer par rÃ©gion dans le tableau "Postes disponibles"<br>
+        â Trier par <strong>NA (disponible)</strong> dÃ©croissant<br>
+        â VÃ©rifier que <strong>TX &lt; 80 %</strong> et NA â¥ puissance du projet
       </div>
       <div>
-        <strong style="color:var(--orange);">Je veux surveiller la saturation d'une région :</strong><br>
-        → Comparer <strong>Postes saturés (TX ≥ 100 %)</strong> / total postes<br>
-        → Suivre l'évolution dans le temps via l'historique CSV<br>
-        → Alerter si une région dépasse 30 % de postes saturés
+        <strong style="color:var(--orange);">Je veux surveiller la saturation d'une rÃ©gion :</strong><br>
+        â Comparer <strong>Postes saturÃ©s (TX â¥ 100 %)</strong> / total postes<br>
+        â Suivre l'Ã©volution dans le temps via l'historique CSV<br>
+        â Alerter si une rÃ©gion dÃ©passe 30 % de postes saturÃ©s
       </div>
       <div>
-        <strong style="color:var(--purple);">Je veux estimer le coût de raccordement :</strong><br>
-        → Lire la <strong>Quote-Part (QP)</strong> du poste cible en €/kW<br>
-        → Multiplier par la puissance du projet en kW<br>
-        → Ex. : 500 kW × 84 €/kW = 42 000 € de participation S3REnR
+        <strong style="color:var(--purple);">Je veux estimer le coÃ»t de raccordement :</strong><br>
+        â Lire la <strong>Quote-Part (QP)</strong> du poste cible en â¬/kW<br>
+        â Multiplier par la puissance du projet en kW<br>
+        â Ex. : 500 kW Ã 84 â¬/kW = 42 000 â¬ de participation S3REnR
       </div>
     </div>
   </div>
 
 </div>
 
+<!-- ===== SECTION ANALYSE POSTE SOURCE ===== -->
+<div class="section-title" style="margin-top:8px;">ð Analyse d'un poste source</div>
+<div style="padding: 0 32px 32px;">
+  <div class="card">
+    <div style="display:flex;gap:12px;align-items:flex-end;flex-wrap:wrap;margin-bottom:20px;">
+      <div class="autocomplete-wrap">
+        <label style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;display:block;margin-bottom:6px;">Poste source (nom ou code)</label>
+        <input type="text" id="posteSearch" class="search-box" style="max-width:100%;width:100%;" placeholder="Ex : PERCY, LANDES, BRETAGNE, CABARâ¦" autocomplete="off">
+        <div id="posteSuggestions" class="autocomplete-list"></div>
+      </div>
+      <button onclick="clearPosteSearch()" class="filter-btn" style="height:38px;">â Effacer</button>
+    </div>
+
+    <!-- Fiche poste -->
+    <div id="posteDetail" style="display:none;"></div>
+
+    <!-- Ãtat vide -->
+    <div id="posteEmpty" class="poste-empty">
+      <span class="big-icon">ð</span>
+      Tapez le nom ou le code d'un poste source pour afficher sa fiche dÃ©taillÃ©e<br>
+      <span style="font-size:11px;margin-top:6px;display:block;">DonnÃ©es disponibles : ~50 postes (plus chargÃ©s + plus disponibles)</span>
+    </div>
+  </div>
+</div>
+
 <div class="footer">
-  Dashboard Caparéseau — Données RTE S3REnR — Archivage quotidien automatique configuré<br>
-  Prochaine mise à jour : demain à 08h08
+  Dashboard CaparÃ©seau â DonnÃ©es RTE S3REnR â Archivage quotidien automatique configurÃ©<br>
+  Prochaine mise Ã  jour : demain Ã  08h08
 </div>
 
 <script>
@@ -407,36 +459,36 @@ const regionData = {
   "HAUTS-DE-FRANCE":{"count":229,"total_cr":5500,"total_na":3337,"total_ess":314,"total_fa":2313,"free":44,"low":48,"medium":50,"high":41,"overloaded":8,"noData":38},
   "OCCITANIE":{"count":363,"total_cr":8098,"total_na":3239,"total_ess":1179,"total_fa":3844,"free":25,"low":57,"medium":144,"high":57,"overloaded":3,"noData":77},
   "NOUVELLE-AQUITAINE":{"count":415,"total_cr":16362,"total_na":2742,"total_ess":3572,"total_fa":11965,"free":17,"low":22,"medium":93,"high":194,"overloaded":44,"noData":45},
-  "AUVERGNE-RHÔNE-ALPES":{"count":494,"total_cr":7620,"total_na":1627,"total_ess":2039,"total_fa":5180,"free":41,"low":84,"medium":156,"high":152,"overloaded":14,"noData":47},
-  "BOURGOGNE-FRANCHE-COMTÉ":{"count":177,"total_cr":5400,"total_na":870,"total_ess":711,"total_fa":4308,"free":9,"low":24,"medium":51,"high":70,"overloaded":11,"noData":12},
-  "PROVENCE-ALPES-CÔTE D'AZUR":{"count":246,"total_cr":6400,"total_na":2291,"total_ess":780,"total_fa":3660,"free":48,"low":56,"medium":62,"high":53,"overloaded":3,"noData":24},
+  "AUVERGNE-RHÃNE-ALPES":{"count":494,"total_cr":7620,"total_na":1627,"total_ess":2039,"total_fa":5180,"free":41,"low":84,"medium":156,"high":152,"overloaded":14,"noData":47},
+  "BOURGOGNE-FRANCHE-COMTÃ":{"count":177,"total_cr":5400,"total_na":870,"total_ess":711,"total_fa":4308,"free":9,"low":24,"medium":51,"high":70,"overloaded":11,"noData":12},
+  "PROVENCE-ALPES-CÃTE D'AZUR":{"count":246,"total_cr":6400,"total_na":2291,"total_ess":780,"total_fa":3660,"free":48,"low":56,"medium":62,"high":53,"overloaded":3,"noData":24},
   "GRAND EST":{"count":307,"total_cr":5995,"total_na":2144,"total_ess":903,"total_fa":3367,"free":44,"low":65,"medium":83,"high":62,"overloaded":5,"noData":48},
-  "NORMANDIE":{"count":151,"total_cr":1891,"total_na":559,"total_ess":263,"total_fa":1327,"free":14,"low":38,"medium":39,"high":28,"overloaded":5,"noData":27},
-  "ÎLE-DE-FRANCE":{"count":237,"total_cr":960,"total_na":142,"total_ess":327,"total_fa":750,"free":12,"low":22,"medium":22,"high":44,"overloaded":3,"noData":134},
+  "NORMANDIE":{"count":151,"total_cr":1891,"total_na":559,total_ess":263,"total_fa":1327,"free":14,"low":38,"medium":39,"high":28,"overloaded":5,"noData":27},
+  "ÃLE-DE-FRANCE":{"count":237,"total_cr":960,"total_na":142,"total_ess":327,"total_fa":750,"free":12,"low":22,"medium":22,"high":44,"overloaded":3,"noData":134},
   "PAYS DE LA LOIRE":{"count":176,"total_cr":5000,"total_na":1088,"total_ess":392,"total_fa":4780,"free":13,"low":28,"medium":18,"high":16,"overloaded":2,"noData":99}
 };
 
 const topOverloaded = [
   {c:"PERCY",n:"PERCY",r:"NORMANDIE",load:719,cr:11,ess:2.9,fa:76.2,qp:12.3},
   {c:"MONCO",n:"MONCOUTANT",r:"NOUVELLE-AQUITAINE",load:500,cr:16.6,ess:71,fa:12,qp:92.73},
-  {c:"M.HER",n:"LA MOTHE ST HERAY",r:"NOUVELLE-AQUITAINE",load:467,cr:12,ess:51.8,fa:4.3,qp:92.73},
-  {c:"F.JOU",n:"LA FERTE-SOUS-JOUARRE",r:"ÎLE-DE-FRANCE",load:467,cr:6.2,ess:4.1,fa:25,qp:1.88},
+  {c:"M.HER",n:"LA MOTHE ST HERAY",r:"NOUVELLE-AQUITAINE",load:467,cr:12,ess:30.4,fa:25.9,qp:92.73},
+  {c:"F.JOU",n:"LA FERTE-SOUS-JOUARRE",r:"ÃLE-DE-FRANCE",load:467,cr:6.2,ess:25.1,fa:3.8,qp:1.88},
   {c:"PHELI",n:"PHELIBON",r:"CENTRE-VAL DE LOIRE",load:440,cr:6,ess:26.4,fa:0,qp:70.49},
-  {c:"GERMI",n:"GERMIGNY",r:"BOURGOGNE-FRANCHE-COMTÉ",load:359,cr:15.9,ess:2,fa:55.1,qp:75},
+  {c:"GERMI",n:"GERMIGNY",r:"BOURGOGNE-FRANCHE-COMTÃ",load:359,cr:15.9,ess:6,fa:50.8,qp:75},
   {c:"BXNE6",n:"BEAUNE-LA-ROLANDE",r:"CENTRE-VAL DE LOIRE",load:357,cr:25,ess:24.8,fa:64.4,qp:70.49},
-  {c:"BREAU",n:"BREAU",r:"BOURGOGNE-FRANCHE-COMTÉ",load:353,cr:9,ess:2,fa:29.8,qp:75},
-  {c:"PAROY",n:"PAROY",r:"BOURGOGNE-FRANCHE-COMTÉ",load:344,cr:9.9,ess:3,fa:31.1,qp:75},
-  {c:"MERLE",n:"MERLE",r:"NOUVELLE-AQUITAINE",load:333,cr:15,ess:50,fa:0,qp:92.73},
-  {c:"LUSAR",n:"LUSARAT",r:"NOUVELLE-AQUITAINE",load:327,cr:6,ess:10.6,fa:9,qp:92.73},
+  {c:"BREAU",n:"BREAU",r:"BOURGOGNE-FRANCHE-COMTÃ",load:353,cr:9,ess:2.2,fa:29.6,qp:75},
+  {c:"PAROY",n:"PAROY",r:"BOURGOGNE-FRANCHE-COMTÃ",load:344,cr:9.9,ess:3,fa:31.1,qp:75},
+  {c:"MERLE",n:"MERLE",r:"NOUVELLE-AQUITAINE",load:333,cr:15,ess:3.9,fa:46.1,qp:92.73},
+  {c:"L.ouT",n:"LOUTRE (LA)",r:"OCCITANIE",load:327,cr:5.5,ess:5.9,fa:12,qp:84.13},
   {c:"VRN63",n:"VARENNE",r:"NOUVELLE-AQUITAINE",load:318,cr:11,ess:8,fa:27,qp:92.73},
   {c:"MARIS",n:"MARAIS-VERNIER",r:"NORMANDIE",load:313,cr:6,ess:0.3,fa:18.5,qp:12.3},
-  {c:"VILLO",n:"VILLORCEAU",r:"CENTRE-VAL DE LOIRE",load:310,cr:18,ess:15.2,fa:40.6,qp:70.49},
-  {c:"LIMOR",n:"LIMOURS",r:"ÎLE-DE-FRANCE",load:292,cr:6,ess:6,fa:11.5,qp:1.88},
-  {c:"BRIVE",n:"BRIVE",r:"NOUVELLE-AQUITAINE",load:283,cr:35.1,ess:18.2,fa:81,qp:92.73},
+  {c:"VILLO",n:"VILLORCEAU"cr:"CENTRE-VAL DE LOIRE",load:310,cr:18,ess:15.2,fa:40.6,qp:70.49},
+  {c:"LIMOR",n:"LIMOURS",r:"ÃLE-DE-FRANCE",load:292,cr:6,ess:6,fa:11.5,qp:1.88},
+  {c:"BRIVE",n:"BRIVE",r:"NOUVELLE-AQUITAINE",load:283,cr:35.1,ess:24.6,fa:75,qp:92.73},
   {c:"SSSLH",n:"SOLESMES",r:"HAUTS-DE-FRANCE",load:275,cr:6.8,ess:0.9,fa:17.8,qp:77.62},
-  {c:"STCYR",n:"ST CYR EN ARTHIES",r:"ÎLE-DE-FRANCE",load:271,cr:11.4,ess:24.9,fa:5.9,qp:1.88},
+  {c:"STCYR",n:"ST CYR EN ARTHIES",r:"ÃLE-DE-FRANCE",load:271,cr:11.4,ess:24.9,fa:5.9,qp:1.88},
   {c:"BLERE",n:"BLERE",r:"CENTRE-VAL DE LOIRE",load:261,cr:12,ess:11.3,fa:20,qp:70.49},
-  {c:"BELET",n:"BELET",r:"NOUVELLE-AQUITAINE",load:259,cr:22,ess:44.2,fa:12.8,qp:92.73},
+  {c:"BELET",n:"BELET",r:"NOUVELLE-AQUITAINE",load:259,cr:22,ess:32.8,fa:24.2,qp:92.73},
 ];
 
 const topAvailable = [
@@ -451,22 +503,22 @@ const topAvailable = [
   {c:"M.LIM",n:"MARCHE LIMOUSINE",r:"NOUVELLE-AQUITAINE",na:194.8,cr:362.8,ess:0,fa:168,qp:92.73},
   {c:"PERT3",n:"PERTAIN 3",r:"HAUTS-DE-FRANCE",na:174.9,cr:216,ess:0,fa:41.1,qp:77.62},
   {c:"VIBRA",n:"VIBRAYE",r:"PAYS DE LA LOIRE",na:173.3,cr:173.3,ess:0,fa:0,qp:60.84},
-  {c:"A.DUR",n:"ASSE-DURANCE",r:"PROVENCE-ALPES-CÔTE D'AZUR",na:160,cr:160,ess:0,fa:0,qp:78.47},
+  {c:"A.DUR",n:"ASSE-DURANCE",r:"PROVENCE-ALPES-CÃTE D'AZUR",na:160,cr:160,ess:0,fa:0,qp:78.47},
   {c:"PLAST",n:"PLASTO",r:"HAUTS-DE-FRANCE",na:150,cr:150,ess:0,fa:0,qp:77.62},
-  {c:"GRANS",n:"GRANS",r:"PROVENCE-ALPES-CÔTE D'AZUR",na:150,cr:150,ess:0,fa:0,qp:78.47},
+  {c:"GRANS",n:"GRANS",r:"PROVENCE-ALPES-CÃTE D'AZUR",na:150,cr:150,ess:0,fa:0,qp:78.47},
   {c:"SCOUR",n:"ST JEAN DE COURANCE",r:"HAUTS-DE-FRANCE",na:142,cr:150,ess:0,fa:8,qp:77.62},
-  {c:"B.AUR",n:"BAS EN AURIOL",r:"PROVENCE-ALPES-CÔTE D'AZUR",na:140,cr:140,ess:0,fa:0,qp:78.47},
+  {c:"B.AUR",n:"BAS EN AURIOL",r:"PROVENCE-ALPES-CÃTE D'AZUR",na:140,cr:140,ess:0,fa:0,qp:78.47},
   {c:"C.PEN",n:"COTES DE PENTHIEVRE",r:"BRETAGNE",na:140,cr:140,ess:0,fa:0,qp:82.22},
   {c:"BARBO",n:"BARBONVILLE",r:"GRAND EST",na:136.5,cr:136.5,ess:0,fa:0,qp:73.82},
   {c:"MOSEL",n:"MOSELLE SUD",r:"GRAND EST",na:130,cr:130,ess:0,fa:0,qp:73.82},
   {c:"SL.ML",n:"ST LAURENT-MARVEJOLS",r:"OCCITANIE",na:122,cr:232,ess:0,fa:110,qp:84.13},
-  {c:"CABAR",n:"CABARDÈS",r:"OCCITANIE",na:120,cr:240,ess:39.5,fa:80.5,qp:84.13},
+  {c:"CABAR",n:"CABARDÃS",r:"OCCITANIE",na:120,cr:240,ess:39.5,fa:80.5,qp:84.13},
   {c:"CAUSS",n:"CAUSSE MEJEAN",r:"OCCITANIE",na:120,cr:120,ess:0,fa:0,qp:84.13},
   {c:"VIELL",n:"VIELLE AURE",r:"OCCITANIE",na:118,cr:118,ess:0,fa:0,qp:84.13},
   {c:"C.NOR",n:"CHAMPAGNE NORD",r:"GRAND EST",na:115.5,cr:205,ess:1,fa:88.5,qp:73.82},
   {c:"FUMEL",n:"FUMEL",r:"NOUVELLE-AQUITAINE",na:113.6,cr:144.2,ess:0,fa:30.6,qp:92.73},
   {c:"LOUDU",n:"LOUDUN",r:"NOUVELLE-AQUITAINE",na:112,cr:340,ess:0,fa:228,qp:92.73},
-  {c:"VEAUC",n:"VEAUCHE",r:"AUVERGNE-RHÔNE-ALPES",na:111,cr:111,ess:0,fa:0,qp:42.4},
+  {c:"VEAUC",n:"VEAUCHE",r:"AUVERGNE-RHÃNE-ALPES",na:111,cr:111,ess:0,fa:0,qp:42.4},
   {c:"MAULX",n:"MAULX (CHAMPS)",r:"GRAND EST",na:107,cr:107,ess:0,fa:0,qp:73.82},
   {c:"GLATO",n:"GLATONNIERE",r:"BRETAGNE",na:105,cr:190,ess:0,fa:85,qp:82.22},
   {c:"ARGEN",n:"ARGENTON",r:"BRETAGNE",na:105,cr:155,ess:0,fa:50,qp:82.22},
@@ -478,15 +530,15 @@ Chart.defaults.borderColor = 'rgba(71, 85, 105, 0.3)';
 Chart.defaults.font.family = '-apple-system, BlinkMacSystemFont, Segoe UI, sans-serif';
 
 const regionNames = Object.keys(regionData).sort((a,b) => regionData[b].total_cr - regionData[a].total_cr);
-const shortNames = regionNames.map(r => r.length > 18 ? r.substring(0, 16) + '…' : r);
+const shortNames = regionNames.map(r => r.length > 18 ? r.substring(0, 16) + 'â¦' : r);
 
-// Chart 1: Capacité réservée par région
+// Chart 1: CapacitÃ© rÃ©servÃ©e par rÃ©gion
 new Chart(document.getElementById('chartRegionCR'), {
   type: 'bar',
   data: {
     labels: shortNames,
     datasets: [{
-      label: 'Capacité réservée (MW)',
+      label: 'CapacitÃ© rÃ©servÃ©e (MW)',
       data: regionNames.map(r => regionData[r].total_cr),
       backgroundColor: 'rgba(56, 189, 248, 0.7)',
       borderRadius: 4
@@ -508,7 +560,7 @@ new Chart(document.getElementById('chartRegionCR'), {
 new Chart(document.getElementById('chartLoadDist'), {
   type: 'doughnut',
   data: {
-    labels: ['Libre (≤10%)', 'Faible (10-50%)', 'Moyen (50-100%)', 'Élevé (100-200%)', 'Surchargé (>200%)', 'Sans données'],
+    labels: ['Libre (â¤10%)', 'Faible (10-50%)', 'Moyen (50-100%)', 'ÃlevÃ© (100-200%)', 'SurchargÃ© (>200%)', 'Sans donnÃ©es'],
     datasets: [{
       data: [309, 513, 805, 797, 105, 590],
       backgroundColor: ['#34d399', '#38bdf8', '#fbbf24', '#fb923c', '#f87171', '#475569'],
@@ -524,7 +576,7 @@ new Chart(document.getElementById('chartLoadDist'), {
   }
 });
 
-// Chart 3: Stacked bar - puissances par région
+// Chart 3: Stacked bar - puissances par rÃ©gion
 new Chart(document.getElementById('chartRegionPower'), {
   type: 'bar',
   data: {
@@ -559,8 +611,8 @@ new Chart(document.getElementById('chartRegionLoad'), {
       {label: 'Libre', data: regionNames.map(r => regionData[r].free), backgroundColor: '#34d399'},
       {label: 'Faible', data: regionNames.map(r => regionData[r].low), backgroundColor: '#38bdf8'},
       {label: 'Moyen', data: regionNames.map(r => regionData[r].medium), backgroundColor: '#fbbf24'},
-      {label: 'Élevé', data: regionNames.map(r => regionData[r].high), backgroundColor: '#fb923c'},
-      {label: 'Surchargé', data: regionNames.map(r => regionData[r].overloaded), backgroundColor: '#f87171'},
+      {label: 'ÃlevÃ©', data: regionNames.map(r => regionData[r].high), backgroundColor: '#fb923c'},
+      {label: 'SurchargÃ©', data: regionNames.map(r => regionData[r].overloaded), backgroundColor: '#f87171'},
     ]
   },
   options: {
@@ -588,7 +640,7 @@ function barHTML(used, total) {
 // Table: Overloaded
 const tbOver = document.querySelector('#tableOverloaded tbody');
 topOverloaded.forEach(p => {
-  tbOver.innerHTML += '<tr><td><strong>' + p.c + '</strong></td><td>' + p.n + '</td><td>' + p.r + '</td><td>' + loadTag(p.load) + '</td><td>' + p.cr + '</td><td>' + p.ess + '</td><td>' + p.fa + '</td><td>' + p.qp + ' €</td></tr>';
+  tbOver.innerHTML += '<tr><td><strong>' + p.c + '</strong></td><td>' + p.n + '</td><td>' + p.r + '</td><td>' + loadTag(p.load) + '</td><td>' + p.cr + '</td><td>' + p.ess + '</td><td>' + p.fa + '</td><td>' + p.qp + ' â¬</td></tr>';
 });
 
 // Table: Available
@@ -601,7 +653,7 @@ function renderAvailTable(filter, search) {
   if (search) { const s = search.toLowerCase(); data = data.filter(p => p.n.toLowerCase().includes(s) || p.c.toLowerCase().includes(s) || p.r.toLowerCase().includes(s)); }
   data.forEach(p => {
     const used = p.cr - p.na;
-    tb.innerHTML += '<tr><td><strong>' + p.c + '</strong></td><td>' + p.n + '</td><td>' + p.r + '</td><td style="color:var(--green);font-weight:700">' + p.na + ' MW</td><td>' + barHTML(used, p.cr) + '</td><td>' + p.cr + '</td><td>' + p.qp + ' €</td></tr>';
+    tb.innerHTML += '<tr><td><strong>' + p.c + '</strong></td><td>' + p.n + '</td><td>' + p.r + '</td><td style="color:var(--green);font-weight:700">' + p.na + ' MW</td><td>' + barHTML(used, p.cr) + '</td><td>' + p.cr + '</td><td>' + p.qp + ' â¬</td></tr>';
   });
 }
 renderAvailTable('all');
@@ -615,6 +667,223 @@ function filterRegion(r) {
 }
 document.getElementById('searchAvail').addEventListener('input', e => renderAvailTable(currentFilter, e.target.value));
 
+// ===== POSTE SOURCE ANALYZER =====
+
+// Build combined postes array (overloaded + available, deduped by code)
+const allPostes = [];
+const _seenCodes = new Set();
+
+topOverloaded.forEach(p => {
+  if (!_seenCodes.has(p.c)) {
+    _seenCodes.add(p.c);
+    allPostes.push({c:p.c, n:p.n, r:p.r, cr:p.cr, na:Math.max(0, p.cr - p.ess - p.fa), ess:p.ess, fa:p.fa, qp:p.qp, load:p.load});
+  }
+});
+topAvailable.forEach(p => {
+  if (!_seenCodes.has(p.c)) {
+    _seenCodes.add(p.c);
+    const load = p.cr > 0 ? Math.round((p.ess + p.fa) / p.cr * 100) : 0;
+    allPostes.push({c:p.c, n:p.n, r:p.r, cr:p.cr, na:p.na, ess:p.ess, fa:p.fa, qp:p.qp, load:load});
+  }
+});
+
+// Historical CSV data embedded (region level â used for temporal chart)
+const historiqueData = [
+  {date:"27/03",region:"BRETAGNE",cr:4403,na:3325,ess:100.4,satures:5,proches:15},
+  {date:"27/03",region:"CENTRE-VAL DE LOIRE",cr:4939,na:388.3,ess:963.8,satures:92,proches:29},
+  {date:"27/03",region:"HAUTS-DE-FRANCE",cr:5499.9,na:3337,ess:313.5,satures:51,proches:19},
+  {date:"27/03",region:"OCCITANIE",cr:8097.5,na:3239.2,ess:1178.9,satures:68,proches:68},
+  {date:"27/03",region:"NOUVELLE-AQUITAINE",cr:16362,na:2742,ess:3571.5,satures:225,proches:49},
+  {date:"27/03",region:"AUVERGNE-RHÃNE-ALPES",cr:7619.7,na:2982.3,ess:1517.8,satures:19,proches:90},
+  {date:"27/03",region:"BOURGOGNE-FRANCHE-COMTÃ",cr:5400.3,na:1215.1,ess:734.9,satures:117,proches:15},
+  {date:"27/03",region:"PROVENCE-ALPES-CÃTE D'AZUR",cr:6400,na:4830.6,ess:474.7,satures:4,proches:10},
+  {date:"27/03",region:"GRAND EST",cr:5994.8,na:814.4,ess:1321.4,satures:168,proches:48},
+  {date:"27/03",region:"NORMANDIE",cr:1891,na:113,ess:879.6,satures:85,proches:23},
+  {date:"27/03",region:"ÃLE-DE-FRANCE",cr:960.3,na:24.2,ess:466.6,satures:121,proches:11},
+  {date:"27/03",region:"PAYS DE LA LOIRE",cr:5000,na:2877.6,ess:558.1,satures:28,proches:11},
+  {date:"28/03",region:"BRETAGNE",cr:4403,na:3325,ess:100.4,satures:5,proches:15},
+  {date:"28/03",region:"CENTRE-VAL DE LOIRE",cr:4939,na:388.3,ess:963.8,satures:92,proches:29},
+  {date:"28/03",region:"HAUTS-DE-FRANCE",cr:5499.9,na:3337,ess:313.5,satures:51,proches:19},
+  {date:"28/03",region:"OCCITANIE",cr:8097.5,na:3239.2,ess:1178.9,satures:68,proches:68},
+  {date:"28/03",region:"NOUVELLE-AQUITAINE",cr:16362,na:2742,ess:3571.5,satures:225,proches:49},
+  {date:"28/03",region:"AUVERGNE-RHÃNQ-ALPES",cr:7619.7,na:2982.3,ess:1517.8,satures:19,proches:90},
+  {date:"28/03",region:"BOURGOGNE-FRANCHE-COMTÃ",cr:5400.3,na:1215.1,ess:734.9,satures:117,proches:15},
+  {date:"28/03",region:"PROVENCE-ALPES-CÃTE D'AZUR",cr:6400,na:4830.6,ess:474.7,satures:4,proches:10},
+  {date:"28/03",region:"GRAND EST",cr:5994.8,na:814.4,ess:1321.4,satures:168,proches:48},
+  {date:"28/03",region:"NORMANDIE",cr:1891,na:113,ess:879.6,satures:85,proches:23},
+  {date:"28/03",region:"ÃLE-DE-FRANCE",cr:960.3,na:24.2,ess:466.6,satures:121,proches:11},
+  {date:"28/03",region:"PAYS DE LA LOIRE",cr:5000,na:2877.6,ess:558.1,satures:28,proches:11},
+];
+
+// Region name normalizer (CSV uses non-accented forms)
+function matchRegion(posteRegion) {
+  const r = posteRegion.trim().toUpperCase();
+  const found = historiqueData.filter(d => {
+    const dr = d.region.toUpperCase();
+    return dr === r || dr.replace(/[ÃÃÃÃ]/g,'E').replace(/[ÃÃÃÃ]/g,'I').replace(/[ÃÃÃÃ]/g,'A').replace(/[ÃÃÃÃÃ]/g,'O').replace(/[ÃÃÃÃ]/g,'U').replace(/[Ã]/g,'C').replace(/['']/g,"'")
+        === r.replace(/[ÃÃÃÃ]/g,'E').replace(/[ÃÃÃÃ]/g,'I').replace(/[ÃÃÃÃ]/g,'A').replace(/[ÃÃÃÃÃ]/g,'O').replace(/[ÃÃÃÃ]/g,'U').replace(/[Ã]/g,'C').replace(/['']/g,"'");
+  });
+  return found;
+}
+
+function getSatStyle(load) {
+  if (load >= 100) return {cls:'red', label:'ð´ SaturÃ©', color:'#f87171', bg:'rgba(248,113,113,0.15)'};
+  if (load >= 80)  return {cls:'orange', label:'ð  Proche saturation', color:'#fb923c', bg:'rgba(251,146,60,0.15)'};
+  if (load >= 50)  return {cls:'yellow', label:'ð¡ ChargÃ©', color:'#fbbf24', bg:'rgba(251,191,36,0.15)'};
+  if (load >= 10)  return {cls:'accent', label:'ðµ Faible charge', color:'#38bdf8', bg:'rgba(56,189,248,0.15)'};
+  return {cls:'green', label:'ð¢ Disponible', color:'#34d399', bg:'rgba(52,211,153,0.15)'};
+}
+
+let _activePosteChart = null;
+
+function renderPosteDetail(p) {
+  const sat = getSatStyle(p.load);
+  const gaugePct = Math.min(p.load, 100);
+  const na = p.na !== undefined ? p.na : Math.max(0, p.cr - p.ess - p.fa);
+
+  document.getElementById('posteEmpty').style.display = 'none';
+  const detail = document.getElementById('posteDetail');
+  detail.style.display = 'block';
+
+  detail.innerHTML = `
+    <div class="poste-header">
+      <div>
+        <div class="poste-title">${p.n}</div>
+        <div class="poste-subtitle">Code : <strong style="color:var(--accent)">${p.c}</strong> &nbsp;â¢&nbsp; RÃ©gion : <strong style="color:var(--text)">${p.r}</strong></div>
+      </div>
+      <div class="sat-badge" style="background:${sat.bg};color:${sat.color};">${sat.label} &nbsp; ${p.load} %</div>
+    </div>
+
+    <!-- Gauge saturation -->
+    <div class="gauge-wrap">
+      <div class="gauge-label">
+        <span>Taux de remplissage <small>(ESS3R + FAS3R) / CR</small></span>
+        <span style="color:${sat.color};font-weight:700;">${p.load} %</span>
+      </div>
+      <div class="gauge-bar">
+        <div class="gauge-fill" style="width:${gaugePct}%;background:${sat.color};"></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--muted);margin-top:3px;"><span>0 %</span><span style="color:var(--yellow)">50 %</span><span style="color:var(--orange)">80 %</span><span style="color:var(--red)">100 %+</span></div>
+    </div>
+
+    <!-- Metrics -->
+    <div class="metric-grid" style="margin-top:20px;">
+      <div class="metric-item" style="border-left-color:var(--accent);">
+        <div class="m-label">CapacitÃ© RÃ©servÃ©e (CR)</div>
+        <div class="m-value" style="color:var(--accent);">${p.cr}</div>
+        <div class="m-unit">MW â plafond S3REnR</div>
+      </div>
+      <div class="metric-item" style="border-left-color:var(--green);">
+        <div class="m-label">Non AffectÃ©e (NA)</div>
+        <div class="m-value" style="color:var(--green);">${na}</div>
+        <div class="m-unit">MW disponibles</div>
+      </div>
+      <div class="metric-item" style="border-left-color:var(--yellow);">
+        <div class="m-label">En service (ESS3R)</div>
+        <div class="m-value" style="color:var(--yellow);">${p.ess}</div>
+        <div class="m-unit">MW raccordÃ©s</div>
+      </div>
+      <div class="metric-item" style="border-left-color:var(--orange);">
+        <div class="m-label">File d'attente (FAS3R)</div>
+        <div class="m-value" style="color:var(--orange);">${p.fa}</div>
+        <div class="m-unit">MW en attente</div>
+      </div>
+      <div class="metric-item" style="border-left-color:var(--purple);">
+        <div class="m-label">Quote-Part (QP)</div>
+        <div class="m-value" style="color:var(--purple);">${p.qp}</div>
+        <div class="m-unit">â¬/kW de participation</div>
+      </div>
+      <div class="metric-item" style="border-left-color:${sat.color};">
+        <div class="m-label">Taux de remplissage</div>
+        <div class="m-value" style="color:${sat.color};">${p.load} %</div>
+        <div class="m-unit">${sat.label}</div>
+      </div>
+    </div>
+
+    <!-- Regional temporal chart -->
+    <div style="margin-top:28px;padding-top:20px;border-top:1px solid #334155;">
+      <h2 style="font-size:15px;font-weight:600;margin-bottom:4px;display:flex;align-items:center;gap:8px;">
+        ð Ãvolution de la rÃ©gion <span class="badge">${p.r}</span>
+      </h2>
+      <p style="font-size:11px;color:var(--muted);margin-bottom:14px;">DonnÃ©es agrÃ©gÃ©es de la rÃ©gion (historique CSV) â l'Ã©volution individuelle du poste sera disponible dÃ¨s que plusieurs snapshots seront archivÃ©s.</p>
+      <div class="chart-container" style="height:220px;"><canvas id="posteHistoChart"></canvas></div>
+    </div>
+  `;
+
+  // Draw temporal chart
+  if (_activePosteChart) { _activePosteChart.destroy(); _activePosteChart = null; }
+  const regionRows = matchRegion(p.r);
+  if (regionRows.length > 0) {
+    const dates = [...new Set(regionRows.map(d => d.date))].sort();
+    _activePosteChart = new Chart(document.getElementById('posteHistoChart'), {
+      type: 'line',
+      data: {
+        labels: dates,
+        datasets: [
+          {label:'Disponible rÃ©gion (MW)', data:dates.map(dt=>{const r=regionRows.find(d=>d.date===dt);return r?r.na:null;}), borderColor:'#34d399', backgroundColor:'rgba(52,211,153,0.1)', tension:0.3, fill:true, pointRadius:5},
+          {label:'En service rÃ©gion (MW)', data:dates.map(dt=>{const r=regionRows.find(d=>d.date===dt);return r?r.ess:null;}), borderColor:'#fbbf24', backgroundColor:'rgba(251,191,36,0.08)', tension:0.3, pointRadius:5},
+          {label:'Postes saturÃ©s (nb)', data:dates.map(dt=>{const r=regionRows.find(d=>d.date===dt);return r?r.satures:null;}), borderColor:'#f87171', backgroundColor:'rgba(248,113,113,0.08)', tension:0.3, pointRadius:5, yAxisID:'y2'}
+        ]
+      },
+      options: {
+        responsive:true, maintainAspectRatio:false,
+        plugins:{legend:{position:'top', labels:{font:{size:11}}}},
+        scales:{
+          y:{title:{display:true, text:'MW'}, beginAtZero:false},
+          y2:{position:'right', title:{display:true, text:'Postes saturÃ©s (nb)'}, grid:{drawOnChartArea:false}, beginAtZero:true}
+        }
+      }
+    });
+  }
+}
+
+// Autocomplete & search setup
+const _posteInput = document.getElementById('posteSearch');
+const _posteSugg = document.getElementById('posteSuggestions');
+
+_posteInput.addEventListener('input', function() {
+  const val = this.value.trim().toLowerCase();
+  if (!val) { _posteSugg.style.display = 'none'; return; }
+  const hits = allPostes.filter(p =>
+    p.n.toLowerCase().includes(val) || p.c.toLowerCase().includes(val) || p.r.toLowerCase().includes(val)
+  ).slice(0, 12);
+  if (!hits.length) { _posteSugg.style.display = 'none'; return; }
+  _posteSugg.innerHTML = hits.map(p =>
+    `<div class="autocomplete-item" onclick="selectPoste('${p.c}')">
+      <span class="ac-code">${p.c}</span>
+      <span class="ac-name">${p.n}</span>
+      <span class="ac-region">${p.r}</span>
+    </div>`
+  ).join('');
+  _posteSugg.style.display = 'block';
+});
+
+_posteInput.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') { _posteSugg.style.display = 'none'; }
+});
+
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('#posteSearch') && !e.target.closest('#posteSuggestions')) {
+    _posteSugg.style.display = 'none';
+  }
+});
+
+function selectPoste(code) {
+  const p = allPostes.find(x => x.c === code);
+  if (!p) return;
+  _posteSugg.style.display = 'none';
+  _posteInput.value = p.n + '  (' + p.c + ')';
+  renderPosteDetail(p);
+}
+
+function clearPosteSearch() {
+  _posteInput.value = '';
+  _posteSugg.style.display = 'none';
+  document.getElementById('posteDetail').style.display = 'none';
+  document.getElementById('posteEmpty').style.display = 'block';
+  if (_activePosteChart) { _activePosteChart.destroy(); _activePosteChart = null; }
+}
+
 // Table: Regions
 const tbReg = document.querySelector('#tableRegions tbody');
 regionNames.forEach(r => {
@@ -624,4 +893,4 @@ regionNames.forEach(r => {
 });
 </script>
 </body>
-</html>
+</ht
