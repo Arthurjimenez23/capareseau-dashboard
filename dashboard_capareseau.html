@@ -112,6 +112,53 @@
 </head>
 <body>
 
+<!-- ===== LOGIN OVERLAY ===== -->
+<div id="loginOverlay" style="display:none;position:fixed;inset:0;z-index:9999;background:#0f172a;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:20px;">
+  <div style="text-align:center;margin-bottom:8px;">
+    <div style="font-size:36px;margin-bottom:8px;">⚡</div>
+    <div style="font-size:22px;font-weight:700;color:#e2e8f0;">Caparéseau Dashboard</div>
+    <div style="font-size:13px;color:#64748b;margin-top:4px;">Accès restreint — veuillez vous identifier</div>
+  </div>
+  <div style="background:#1e293b;border:1px solid #334155;border-radius:12px;padding:32px 40px;min-width:320px;box-shadow:0 20px 60px rgba(0,0,0,0.5);">
+    <label style="font-size:12px;color:#94a3b8;text-transform:uppercase;letter-spacing:0.5px;display:block;margin-bottom:8px;">Mot de passe</label>
+    <input type="password" id="pwdInput" placeholder="••••••••••" autocomplete="current-password"
+      style="width:100%;box-sizing:border-box;padding:10px 14px;border-radius:8px;border:1px solid #334155;background:#0f172a;color:#e2e8f0;font-size:15px;outline:none;"
+      onkeydown="if(event.key==='Enter')checkPwd()">
+    <div id="pwdError" style="color:#f87171;font-size:12px;margin-top:8px;display:none;">Mot de passe incorrect</div>
+    <button onclick="checkPwd()" style="margin-top:16px;width:100%;padding:10px;border-radius:8px;border:none;background:#3b82f6;color:#fff;font-size:15px;font-weight:600;cursor:pointer;">Accéder →</button>
+  </div>
+</div>
+<script>
+(function(){
+  const HASH = 'd5f8873bd5612369fc6f76f21b3d435e91e59ad34d5060cf01c957c358e4c7d2';
+  const KEY = 'cap_auth';
+  async function sha256(msg){
+    const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(msg));
+    return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
+  }
+  async function checkPwd(){
+    const val = document.getElementById('pwdInput').value;
+    const h = await sha256(val);
+    if(h === HASH){
+      sessionStorage.setItem(KEY,'1');
+      document.getElementById('loginOverlay').style.display='none';
+    } else {
+      document.getElementById('pwdError').style.display='block';
+      document.getElementById('pwdInput').value='';
+      document.getElementById('pwdInput').focus();
+    }
+  }
+  window.checkPwd = checkPwd;
+  window.addEventListener('DOMContentLoaded', function(){
+    if(sessionStorage.getItem(KEY)!=='1'){
+      document.getElementById('loginOverlay').style.display='flex';
+      document.getElementById('pwdInput').focus();
+    }
+  });
+})();
+</script>
+
+
 <div class="header">
   <div>
     <h1>⚡ <span>Caparéseau</span> — Dashboard Postes Sources RTE</h1>
