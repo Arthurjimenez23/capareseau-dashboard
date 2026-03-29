@@ -291,6 +291,10 @@
       <button class="filter-btn" onclick="filterRegion('AUVERGNE')">ARA</button>
       <button class="filter-btn" onclick="filterRegion('PROVENCE')">PACA</button>
       <button class="filter-btn" onclick="filterRegion('BOURGOGNE')">BFC</button>
+    <button class="filter-btn" onclick="filterRegion('CENTRE-VAL DE LOIRE')">Centre</button>
+    <button class="filter-btn" onclick="filterRegion('ÎLE-DE-FRANCE')">IdF</button>
+    <button class="filter-btn" onclick="filterRegion('NORMANDIE')">Normandie</button>
+    <button class="filter-btn" onclick="filterRegion('PAYS DE LA LOIRE')">Pays Loire</button>
     </div>
     <div class="table-scroll" style="max-height: 500px;">
       <table id="tableAvailable">
@@ -680,7 +684,7 @@ const topOverloaded = [
   {c:"L.ouT",n:"LOUTRE (LA)",r:"OCCITANIE",load:327,cr:5.5,ess:5.9,fa:12,qp:84.13},
   {c:"VRN63",n:"VARENNE",r:"NOUVELLE-AQUITAINE",load:318,cr:11,ess:8,fa:27,qp:92.73},
   {c:"MARIS",n:"MARAIS-VERNIER",r:"NORMANDIE",load:313,cr:6,ess:0.3,fa:18.5,qp:12.3},
-  {c:"VILLO",n:"VILLORCEAU"cr:"CENTRE-VAL DE LOIRE",load:310,cr:18,ess:15.2,fa:40.6,qp:70.49},
+  {c:"VILLO",n:"VILLORCEAU",r:"CENTRE-VAL DE LOIRE",load:310,cr:18,ess:15.2,fa:40.6,qp:70.49},
   {c:"LIMOR",n:"LIMOURS",r:"ÎLE-DE-FRANCE",load:292,cr:6,ess:6,fa:11.5,qp:1.88},
   {c:"BRIVE",n:"BRIVE",r:"NOUVELLE-AQUITAINE",load:283,cr:35.1,ess:24.6,fa:75,qp:92.73},
   {c:"SSSLH",n:"SOLESMES",r:"HAUTS-DE-FRANCE",load:275,cr:6.8,ess:0.9,fa:17.8,qp:77.62},
@@ -755,12 +759,22 @@ new Chart(document.getElementById('chartRegionCR'), {
 });
 
 // Chart 2: Load distribution (doughnut)
+(function(){
+  const cats = [0,0,0,0,0,0];
+  allPostesData.forEach(p => {
+    if (!p.cr || p.cr === 0) { cats[5]++; }
+    else if (p.load <= 10) { cats[0]++; }
+    else if (p.load <= 50) { cats[1]++; }
+    else if (p.load <= 100) { cats[2]++; }
+    else if (p.load <= 200) { cats[3]++; }
+    else { cats[4]++; }
+  });
 new Chart(document.getElementById('chartLoadDist'), {
   type: 'doughnut',
   data: {
     labels: ['Libre (≤10%)', 'Faible (10-50%)', 'Moyen (50-100%)', 'Élevé (100-200%)', 'Surchargé (>200%)', 'Sans données'],
     datasets: [{
-      data: [309, 513, 805, 797, 105, 590],
+      data: cats,
       backgroundColor: ['#34d399', '#38bdf8', '#fbbf24', '#fb923c', '#f87171', '#475569'],
       borderWidth: 0
     }]
@@ -769,10 +783,11 @@ new Chart(document.getElementById('chartLoadDist'), {
     responsive: true, maintainAspectRatio: false,
     plugins: {
       legend: { position: 'right', labels: { padding: 12, font: { size: 12 } } },
-      tooltip: { callbacks: { label: ctx => ctx.label + ': ' + ctx.parsed + ' postes (' + Math.round(ctx.parsed / 31.19) + '%)' } }
+      tooltip: { callbacks: { label: ctx => ctx.label + ': ' + ctx.parsed + ' postes (' + Math.round(ctx.parsed / allPostesData.length * 100) + '%)' } }
     }
   }
 });
+})();
 
 // Chart 3: Stacked bar - puissances par région
 new Chart(document.getElementById('chartRegionPower'), {
