@@ -1,0 +1,34 @@
+{
+  "date": "2026-03-30",
+  "total_postes": 3256,
+  "postes_par_region": {
+    "AUVERGNE-RHÔNE-ALPES": 524,
+    "BOURGOGNE-FRANCHE-COMTÉ": 184,
+    "BRETAGNE": 174,
+    "CENTRE-VAL DE LOIRE": 163,
+    "GRAND EST": 320,
+    "HAUTS-DE-FRANCE": 244,
+    "NORMANDIE": 157,
+    "NOUVELLE-AQUITAINE": 434,
+    "OCCITANIE": 375,
+    "PAYS DE LA LOIRE": 177,
+    "PROVENCE-ALPES-CÔTE D'AZUR": 256,
+    "ÎLE-DE-FRANCE": 248
+  },
+  "nb_postes_satures": 1032,
+  "postes_satures": [],
+  "capacite_reservee_par_region_MW": {
+    "AUVERGNE-RHÔNE-ALPES": 7922.4,
+    "BOURGOGNE-FRANCHE-COMTÉ": 5492.7,
+    "BRETAGNE": 5119.0,
+    "CENTRE-VAL DE LOIRE": 5027.0,
+    "GRAND EST": 6203.3,
+    "HAUTS-DE-FRANCE": 5787.0,
+    "NORMANDIE": 1916.7,
+    "NOUVELLE-AQUITAINE": 17240.6,
+    "OCCITANIEI8 8272.5,
+    "PAYS DE LA LOIRE": 5081.0,
+    "PROVENCE-ALPES-CÔTE D'AZUR": 6856.0,
+    "ÎLE-DE-FRANCE": 967.2
+  }
+}
