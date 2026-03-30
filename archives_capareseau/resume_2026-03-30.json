@@ -1,34 +1,259 @@
 {
   "date": "2026-03-30",
-  "total_postes": 3256,
-  "postes_par_region": {
-    "AUVERGNE-RHÔNE-ALPES": 524,
-    "BOURGOGNE-FRANCHE-COMTÉ": 184,
-    "BRETAGNE": 174,
-    "CENTRE-VAL DE LOIRE": 163,
-    "GRAND EST": 320,
-    "HAUTS-DE-FRANCE": 244,
-    "NORMANDIE": 157,
-    "NOUVELLE-AQUITAINE": 434,
-    "OCCITANIE": 375,
-    "PAYS DE LA LOIRE": 177,
-    "PROVENCE-ALPES-CÔTE D'AZUR": 256,
-    "ÎLE-DE-FRANCE": 248
-  },
-  "nb_postes_satures": 1032,
-  "postes_satures": [],
-  "capacite_reservee_par_region_MW": {
-    "AUVERGNE-RHÔNE-ALPES": 7922.4,
-    "BOURGOGNE-FRANCHE-COMTÉ": 5492.7,
-    "BRETAGNE": 5119.0,
-    "CENTRE-VAL DE LOIRE": 5027.0,
-    "GRAND EST": 6203.3,
-    "HAUTS-DE-FRANCE": 5787.0,
-    "NORMANDIE": 1916.7,
-    "NOUVELLE-AQUITAINE": 17240.6,
-    "OCCITANIEI8 8272.5,
-    "PAYS DE LA LOIRE": 5081.0,
-    "PROVENCE-ALPES-CÔTE D'AZUR": 6856.0,
-    "ÎLE-DE-FRANCE": 967.2
-  }
+  "total_postes": 3119,
+  "nb_regions": 12,
+  "nb_satures_100pct": 983,
+  "nb_proches_saturation_80pct": 388,
+  "regions": [
+    {
+      "code": "BRETAGNE",
+      "nb_postes": 166,
+      "CR_total_MW": 4403,
+      "NA_total_MW": 3325,
+      "ESS3R_total_MW": 100,
+      "RTE_CDR_MW": 1411,
+      "RTE_ESS3R_MW": 0,
+      "GRD1_CDR_MW": 2106,
+      "GRD2_CDR_MW": 0,
+      "satures_100pct": 5,
+      "proches_80pct": 15
+    },
+    {
+      "code": "CENTRE-VAL DE LOIRE",
+      "nb_postes": 158,
+      "CR_total_MW": 4939,
+      "NA_total_MW": 388,
+      "ESS3R_total_MW": 964,
+      "RTE_CDR_MW": 29,
+      "RTE_ESS3R_MW": 0,
+      "GRD1_CDR_MW": 557,
+      "GRD2_CDR_MW": 0,
+      "satures_100pct": 92,
+      "proches_80pct": 29
+    },
+    {
+      "code": "HAUTS-DE-FRANCE",
+      "nb_postes": 229,
+      "CR_total_MW": 5500,
+      "NA_total_MW": 3337,
+      "ESS3R_total_MW": 313,
+      "RTE_CDR_MW": 3014,
+      "RTE_ESS3R_MW": 0,
+      "GRD1_CDR_MW": 2015,
+      "GRD2_CDR_MW": 1,
+      "satures_100pct": 51,
+      "proches_80pct": 19
+    },
+    {
+      "code": "OCCITANIE",
+      "nb_postes": 363,
+      "CR_total_MW": 8098,
+      "NA_total_MW": 3239,
+      "ESS3R_total_MW": 1179,
+      "RTE_CDR_MW": 885,
+      "RTE_ESS3R_MW": 0,
+      "GRD1_CDR_MW": 1768,
+      "GRD2_CDR_MW": 11,
+      "satures_100pct": 68,
+      "proches_80pct": 68
+    },
+    {
+      "code": "NOUVELLE-AQUITAINE",
+      "nb_postes": 415,
+      "CR_total_MW": 16362,
+      "NA_total_MW": 2742,
+      "ESS3R_total_MW": 3572,
+      "RTE_CDR_MW": 525,
+      "RTE_ESS3R_MW": 44,
+      "GRD1_CDR_MW": 957,
+      "GRD2_CDR_MW": 37,
+      "satures_100pct": 225,
+      "proches_80pct": 49
+    },
+    {
+      "code": "AUVERGNE-RHONE-ALPES",
+      "nb_postes": 494,
+      "CR_total_MW": 7620,
+      "NA_total_MW": 2982,
+      "ESS3R_total_MW": 1518,
+      "RTE_CDR_MW": 1471,
+      "RTE_ESS3R_MW": 4,
+      "GRD1_CDR_MW": 2195,
+      "GRD2_CDR_MW": 0,
+      "satures_100pct": 19,
+      "proches_80pct": 90
+    },
+    {
+      "code": "BOURGOGNE-FRANCHE-COMTE",
+      "nb_postes": 177,
+      "CR_total_MW": 5400,
+      "NA_total_MW": 1215,
+      "ESS3R_total_MW": 735,
+      "RTE_CDR_MW": 141,
+      "RTE_ESS3R_MW": 0,
+      "GRD1_CDR_MW": 340,
+      "GRD2_CDR_MW": 0,
+      "satures_100pct": 117,
+      "proches_80pct": 15
+    },
+    {
+      "code": "PROVENCE-ALPES-COTE D AZUR",
+      "nb_postes": 246,
+      "CR_total_MW": 6400,
+      "NA_total_MW": 4831,
+      "ESS3R_total_MW": 475,
+      "RTE_CDR_MW": 2644,
+      "RTE_ESS3R_MW": 0,
+      "GRD1_CDR_MW": 3516,
+      "GRD2_CDR_MW": 0,
+      "satures_100pct": 4,
+      "proches_80pct": 10
+    },
+    {
+      "code": "GRAND EST",
+      "nb_postes": 307,
+      "CR_total_MW": 5995,
+      "NA_total_MW": 814,
+      "ESS3R_total_MW": 1321,
+      "RTE_CDR_MW": 95,
+      "RTE_ESS3R_MW": 11,
+      "GRD1_CDR_MW": 1063,
+      "GRD2_CDR_MW": 0,
+      "satures_100pct": 168,
+      "proches_80pct": 48
+    },
+    {
+      "code": "NORMANDIE",
+      "nb_postes": 151,
+      "CR_total_MW": 1891,
+      "NA_total_MW": 113,
+      "ESS3R_total_MW": 880,
+      "RTE_CDR_MW": 89,
+      "RTE_ESS3R_MW": 0,
+      "GRD1_CDR_MW": 247,
+      "GRD2_CDR_MW": 0,
+      "satures_100pct": 85,
+      "proches_80pct": 23
+    },
+    {
+      "code": "ILE-DE-FRANCE",
+      "nb_postes": 237,
+      "CR_total_MW": 960,
+      "NA_total_MW": 24,
+      "ESS3R_total_MW": 467,
+      "RTE_CDR_MW": 19,
+      "RTE_ESS3R_MW": 0,
+      "GRD1_CDR_MW": 274,
+      "GRD2_CDR_MW": 0,
+      "satures_100pct": 121,
+      "proches_80pct": 11
+    },
+    {
+      "code": "PAYS DE LA LOIRE",
+      "nb_postes": 176,
+      "CR_total_MW": 5000,
+      "NA_total_MW": 2878,
+      "ESS3R_total_MW": 558,
+      "RTE_CDR_MW": 2146,
+      "RTE_ESS3R_MW": 0,
+      "GRD1_CDR_MW": 2195,
+      "GRD2_CDR_MW": 0,
+      "satures_100pct": 28,
+      "proches_80pct": 11
+    }
+  ],
+  "postes_satures_echantillon": [
+    {
+      "code": "A.ADO",
+      "nom": "AIRE-SUR-ADOUR",
+      "region": "NOUVELLE-AQUITAINE",
+      "tx": 100,
+      "cr": 11.7
+    },
+    {
+      "code": "A.OTH",
+      "nom": "AIX",
+      "region": "GRAND EST",
+      "tx": 100,
+      "cr": 8.2
+    },
+    {
+      "code": "ABBEN",
+      "nom": "ABBENANS",
+      "region": "BOURGOGNE-FRANCHE-COMTE",
+      "tx": 100,
+      "cr": 46.3
+    },
+    {
+      "code": "ABBEV",
+      "nom": "ABBEVILLE",
+      "region": "HAUTS-DE-FRANCE",
+      "tx": 100,
+      "cr": 6.8
+    },
+    {
+      "code": "ADRIE",
+      "nom": "ADRIERS",
+      "region": "NOUVELLE-AQUITAINE",
+      "tx": 100,
+      "cr": 472
+    },
+    {
+      "code": "AGNEA",
+      "nom": "AGNEAUX",
+      "region": "NORMANDIE",
+      "tx": 100,
+      "cr": 6
+    },
+    {
+      "code": "AICIR",
+      "nom": "AICIRITS",
+      "region": "NOUVELLE-AQUITAINE",
+      "tx": 100,
+      "cr": 12.9
+    },
+    {
+      "code": "AIGRE",
+      "nom": "AIGRE",
+      "region": "NOUVELLE-AQUITAINE",
+      "tx": 100,
+      "cr": 48.7
+    },
+    {
+      "code": "AILLA",
+      "nom": "AILLAS",
+      "region": "NOUVELLE-AQUITAINE",
+      "tx": 100,
+      "cr": 20.4
+    },
+    {
+      "code": "AILLE",
+      "nom": "AILLEVILLE",
+      "region": "GRAND EST",
+      "tx": 100,
+      "cr": 59
+    },
+    {
+      "code": "AIRE",
+      "nom": "AIRE",
+      "region": "HAUTS-DE-FRANCE",
+      "tx": 100,
+      "cr": 7.5
+    },
+    {
+      "code": "AIRV2",
+      "nom": "AIRVAULT",
+      "region": "NOUVELLE-AQUITAINE",
+      "tx": 100,
+      "cr": 1
+    },
+    {
+      "code": "ALENC",
+      "nom": "ALENCON",
+      "region": "NORMANDIE",
+      "tx": 100,
+      "cr": 0
+    }
+  ],
+  "note": "983 postes saturés (INFO_TX >= 100%) dont liste partielle ci-dessus"
 }
