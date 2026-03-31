@@ -1,0 +1,21 @@
+{
+  "date": "2026-03-29",
+  "total_postes": 3119,
+  "nb_regions": 12,
+  "total_satures": 983,
+  "total_proches_saturation": 378,
+  "regions": [
+    {"region": "BRETAGNE", "nb_postes": 166, "CR_total_MW": 4403, "NA_total_MW": 3325, "satures": 5, "proches": 15},
+    {"region": "CENTRE-VAL DE LOIRE", "nb_postes": 158, "CR_total_MW": 4939, "NA_total_MW": 388, "satures": 92, "proches": 29},
+    {"region": "HAUTS-DE-FRANCE", "nb_postes": 229, "CR_total_MW": 5500, "NA_total_MW": 3337, "satures": 51, "proches": 19},
+    {"region": "OCCITANIE", "nb_postes": 363, "CR_total_MW": 8098, "NA_total_MW": 3239, "satures": 68, "proches": 68},
+    {"region": "NOUVELLE-AQUITAINE", "nb_postes": 415, "CR_total_MW": 16362, "NA_total_MW": 2742, "satures": 225, "proches": 49},
+    {"region": "AUVERGNE-RHONE-ALPES", "nb_postes": 494, "CR_total_MW": 7620, "NA_total_MW": 2982, "satures": 19, "proches": 90},
+    {"region": "BOURGOGNE-FRANCHE-COMTE", "nb_postes": 177, "CR_total_MW": 5400, "NA_total_MW": 1215, "satures": 117, "proches": 15},
+    {"region": "PROVENCE-ALPES-COTE D'AZUR", "nb_postes": 246, "CR_total_MW": 6400, "NA_total_MW": 4831, "satures": 4, "proches": 10},
+    {"region": "GRAND EST", "nb_postes": 307, "CR_total_MW": 5995, "NA_total_MW": 814, "satures": 168, "proches": 48},
+    {"region": "NORMANDIE", "nb_postes": 151, "CR_total_MW": 1891, "NA_total_MW": 113, "satures": 85, "proches": 23},
+    {"region": "ILE-DE-FRANCE", "nb_postes": 237, "CR_total_MW": 960, "NA_total_MW": 24, "satures": 121, "proches": 11},
+    {"region": "PAYS DE LA LOIRE", "nb_postes": 176, "CR_total_MW": 5000, "NA_total_MW": 2878, "satures": 28, "proches": 11}
+  ]
+}
