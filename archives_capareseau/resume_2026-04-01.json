@@ -1,0 +1,153 @@
+{
+  "date": "2026-04-01",
+  "total_postes": 3119,
+  "total_satures_100pct": 983,
+  "total_proches_saturation_80pct": 388,
+  "total_CR_MW": 72567.5,
+  "regions": {
+    "BRETAGNE": {
+      "Nb_postes": 166,
+      "CR_total_MW": 4403,
+      "NA_total_MW": 3325,
+      "ESS3R_total_MW": 100.4,
+      "RTE_CDR_MW": 1411.4,
+      "RTE_ESS3R_MW": 0,
+      "GRD1_CDR_MW": 2106,
+      "GRD2_CDR_MW": 0,
+      "Satures_100pct": 5,
+      "Proches_saturation_80pct": 15
+    },
+    "CENTRE-VAL DE LOIRE": {
+      "Nb_postes": 158,
+      "CR_total_MW": 4939,
+      "NA_total_MW": 388.3,
+      "ESS3R_total_MW": 963.8,
+      "RTE_CDR_MW": 28.7,
+      "RTE_ESS3R_MW": 0,
+      "GRD1_CDR_MW": 557.2,
+      "GRD2_CDR_MW": 0,
+      "Satures_100pct": 92,
+      "Proches_saturation_80pct": 29
+    },
+    "HAUTS-DE-FRANCE": {
+      "Nb_postes": 229,
+      "CR_total_MW": 5499.9,
+      "NA_total_MW": 3337,
+      "ESS3R_total_MW": 313.5,
+      "RTE_CDR_MW": 3013.8,
+      "RTE_ESS3R_MW": 0,
+      "GRD1_CDR_MW": 2014.9,
+      "GRD2_CDR_MW": 1,
+      "Satures_100pct": 51,
+      "Proches_saturation_80pct": 19
+    },
+    "OCCITANIE": {
+      "Nb_postes": 363,
+      "CR_total_MW": 8097.5,
+      "NA_total_MW": 3239.2,
+      "ESS3R_total_MW": 1178.9,
+      "RTE_CDR_MW": 885.1,
+      "RTE_ESS3R_MW": 0,
+      "GRD1_CDR_MW": 1767.8,
+      "GRD2_CDR_MW": 10.5,
+      "Satures_100pct": 68,
+      "Proches_saturation_80pct": 68
+    },
+    "NOUVELLE-AQUITAINE": {
+      "Nb_postes": 415,
+      "CR_total_MW": 16362,
+      "NA_total_MW": 2742,
+      "ESS3R_total_MW": 3571.5,
+      "RTE_CDR_MW": 525.3,
+      "RTE_ESS3R_MW": 44,
+      "GRD1_CDR_MW": 956.7,
+      "GRD2_CDR_MW": 36.6,
+      "Satures_100pct": 225,
+      "Proches_saturation_80pct": 49
+    },
+    "AUVERGNE-RHONE-ALPES": {
+      "Nb_postes": 494,
+      "CR_total_MW": 7619.7,
+      "NA_total_MW": 2982.3,
+      "ESS3R_total_MW": 1517.8,
+      "RTE_CDR_MW": 1471.5,
+      "RTE_ESS3R_MW": 4.2,
+      "GRD1_CDR_MW": 2195.1,
+      "GRD2_CDR_MW": 0,
+      "Satures_100pct": 19,
+      "Proches_saturation_80pct": 90
+    },
+    "BOURGOGNE-FRANCHE-COMTE": {
+      "Nb_postes": 177,
+      "CR_total_MW": 5400.3,
+      "NA_total_MW": 1215.1,
+      "ESS3R_total_MW": 734.9,
+      "RTE_CDR_MW": 141.4,
+      "RTE_ESS3R_MW": 0,
+      "GRD1_CDR_MW": 340.3,
+      "GRD2_CDR_MW": 0,
+      "Satures_100pct": 117,
+      "Proches_saturation_80pct": 15
+    },
+    "PROVENCE-ALPES-COTE D AZUR": {
+      "Nb_postes": 246,
+      "CR_total_MW": 6400,
+      "NA_total_MW": 4830.6,
+      "ESS3R_total_MW": 474.7,
+      "RTE_CDR_MW": 2644.4,
+      "RTE_ESS3R_MW": 0,
+      "GRD1_CDR_MW": 3515.5,
+      "GRD2_CDR_MW": 0,
+      "Satures_100pct": 4,
+      "Proches_saturation_80pct": 10
+    },
+    "GRAND EST": {
+      "Nb_postes": 307,
+      "CR_total_MW": 5994.8,
+      "NA_total_MW": 814.4,
+      "ESS3R_total_MW": 1321.4,
+      "RTE_CDR_MW": 95.1,
+      "RTE_ESS3R_MW": 11.2,
+      "GRD1_CDR_MW": 1062.6,
+      "GRD2_CDR_MW": 0,
+      "Satures_100pct": 168,
+      "Proches_saturation_80pct": 48
+    },
+    "NORMANDIE": {
+      "Nb_postes": 151,
+      "CR_total_MW": 1891,
+      "NA_total_MW": 113.1,
+      "ESS3R_total_MW": 879.6,
+      "RTE_CDR_MW": 89,
+      "RTE_ESS3R_MW": 0,
+      "GRD1_CDR_MW": 247.1,
+      "GRD2_CDR_MW": 0,
+      "Satures_100pct": 85,
+      "Proches_saturation_80pct": 23
+    },
+    "ILE-DE-FRANCE": {
+      "Nb_postes": 237,
+      "CR_total_MW": 960.3,
+      "NA_total_MW": 24.2,
+      "ESS3R_total_MW": 466.6,
+      "RTE_CDR_MW": 19.4,
+      "RTE_ESS3R_MW": 0,
+      "GRD1_CDR_MW": 273.6,
+      "GRD2_CDR_MW": 0,
+      "Satures_100pct": 121,
+      "Proches_saturation_80pct": 11
+    },
+    "PAYS DE LA LOIRE": {
+      "Nb_postes": 176,
+      "CR_total_MW": 5000,
+      "NA_total_MW": 2877.6,
+      "ESS3R_total_MW": 558.1,
+      "RTE_CDR_MW": 2145.9,
+      "RTE_ESS3R_MW": 0,
+      "GRD1_CDR_MW": 2194.7,
+      "GRD2_CDR_MW": 0,
+      "Satures_100pct": 28,
+      "Proches_saturation_80pct": 11
+    }
+  }
+}
