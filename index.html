@@ -411,6 +411,7 @@ tr:hover td { background: rgba(79,142,247,.05); }
             <th>PTRE (MW)</th><th>CTR (MW)</th>
             <th>GRD1 CDR (MW)</th><th>GRD1 En service (MW)</th>
             <th>Utilisation GRD1</th>
+            <th>Travaux</th>
           </tr>
         </thead>
         <tbody id="tbodyHors"></tbody>
@@ -725,7 +726,7 @@ function renderHors(){
     const util=p.util_pct;
     const cl=util>=80?'badge-red':util>=50?'badge-yellow':util>0?'badge-green':'';
     const tr=document.createElement('tr'); tr.style.cursor='pointer';
-    tr.innerHTML=`<td style="font-weight:500">${p.nom}</td><td style="font-size:11px;color:#94a3b8">${REGIONS_SHORT[p.region]||p.region}</td><td style="color:#a78bfa">${p.ptre?fmtMW(p.ptre):'—'}</td><td style="color:#22c55e">${p.ctr?fmtMW(p.ctr):'—'}</td><td>${p.grd1_cdr?fmtMW(p.grd1_cdr):'—'}</td><td>${p.grd1_ess?fmtMW(p.grd1_ess):'—'}</td><td>${util>0?'<span class="badge '+cl+'">'+util+'%</span>':'—'}</td>`;
+    tr.innerHTML=`<td style="font-weight:500">${p.nom}</td><td style="font-size:11px;color:#94a3b8">${REGIONS_SHORT[p.region]||p.region}</td><td style="color:#a78bfa">${p.ptre?fmtMW(p.ptre):'—'}</td><td style="color:#22c55e">${p.ctr?fmtMW(p.ctr):'—'}</td><td>${p.grd1_cdr?fmtMW(p.grd1_cdr):'—'}</td><td>${p.grd1_ess?fmtMW(p.grd1_ess):'—'}</td><td>${util>0?'<span class="badge '+cl+'">'+util+'%</span>':'—'}</td><td style="text-align:center">${(p.rte_tvx||p.grd1_tvx||p.grd2_tvx||p.grdhtb_tvx||p.info_trf)?'<span title="Travaux signalés" style="color:#f59e0b">🔧 oui</span>':'<span style="color:#475569">—</span>'}</td>`;
     tr.onclick=()=>showDetailHors(p);
     tbody.appendChild(tr);
   });
